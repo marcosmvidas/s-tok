@@ -1,0 +1,153 @@
+﻿@page
+@model s_tok.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Entrar";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entrar | S-TOK</title>
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+</head>
+<body>
+    <main class="login-shell">
+        <section class="welcome-panel">
+            <a class="brand brand-light" href="/" aria-label="S-TOK">
+                <span class="brand-mark">S</span>
+                <span>S-TOK</span>
+            </a>
+
+            <div class="welcome-copy">
+                <span class="eyebrow">GESTÃO INTELIGENTE</span>
+                <h1>Bem-vindo ao<br /><strong>S-TOK</strong></h1>
+
+                <p>
+                    Sua plataforma para gerenciar produtos,
+                    estoque e movimentações em um só lugar.
+                </p>
+            </div>
+
+            <div class="visual-card" aria-hidden="true">
+                <div class="visual-top">
+                    <span class="visual-dot"></span>
+                    <span class="visual-dot"></span>
+                    <span class="visual-dot"></span>
+                    <span class="visual-title">Painel de gestão</span>
+                </div>
+
+                <div class="visual-content">
+                    <div class="visual-menu">
+                        <span class="selected"></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="visual-dashboard">
+                        <div class="visual-heading"></div>
+                        <div class="visual-bars">
+                            <span style="height: 35%"></span>
+                            <span style="height: 60%"></span>
+                            <span style="height: 45%"></span>
+                            <span style="height: 82%"></span>
+                            <span style="height: 68%"></span>
+                            <span style="height: 100%"></span>
+                        </div>
+                        <div class="visual-stats">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benefits">
+                <div>
+                    <span class="benefit-icon">↗</span>
+                    <span>Mais agilidade</span>
+                </div>
+                <div>
+                    <span class="benefit-icon">✓</span>
+                    <span>Mais segurança</span>
+                </div>
+                <div>
+                    <span class="benefit-icon">▥</span>
+                    <span>Mais controle</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="form-inner">
+                <a class="brand brand-dark" href="/" aria-label="S-TOK">
+                    <span class="brand-mark">S</span>
+                    <span>S-TOK</span>
+                </a>
+
+                <header class="form-heading">
+                    <h2>Acesse sua conta</h2>
+                    <p>Informe suas credenciais para continuar.</p>
+                </header>
+
+                <form method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation-summary"
+                         role="alert"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Email">E-mail</label>
+                        <input asp-for="Email"
+                               type="email"
+                               autocomplete="username"
+                               placeholder="Digite seu e-mail"
+                               autofocus />
+                        <span asp-validation-for="Email"
+                              class="field-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password">Senha</label>
+                        <input asp-for="Password"
+                               type="password"
+                               autocomplete="current-password"
+                               placeholder="Digite sua senha" />
+                        <span asp-validation-for="Password"
+                              class="field-error"></span>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-option">
+                            <input asp-for="RememberMe" />
+                            <span>Lembrar de mim</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="login-button">
+                        <span>Entrar</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+
+                    <p class="security-note">
+                        <span aria-hidden="true">●</span>
+                        Acesso protegido pelo S-TOK
+                    </p>
+                </form>
+            </div>
+
+            <footer class="form-footer">
+                © @DateTime.Now.Year S-TOK. Todos os direitos reservados.
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
