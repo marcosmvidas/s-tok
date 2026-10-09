@@ -3,7 +3,7 @@
 **Versão:** 1.0
 **Status:** Inicial
 **Projeto:** S-TOK
-**Tecnologia base:** ASP.NET Core / C#
+**Tecnologia base:** ASP.NET Core / C# -- $enhaSuperAdmin1234
 
 ---
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
+using s_tok.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+// Serviço de configuração inicial
+builder.Services.AddScoped<InitialSetupService>();
+
 // Razor Pages: proteger o sistema por padrão
 builder.Services.AddRazorPages(options =>
 {
@@ -49,6 +53,84 @@ builder.Services.AddRazorPages(options =>
 
 var app = builder.Build();
 
+
+if (args.Contains("--setup-superadmin", StringComparer.OrdinalIgnoreCase))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+
+    var setupService = scope.ServiceProvider
+        .GetRequiredService<InitialSetupService>();
+
+    if (!await setupService.CanInitializeAsync())
+    {
+        Console.WriteLine(
+            "Inicialização cancelada: já existem usuários cadastrados.");
+
+        return;
+    }
+
+    Console.Write("E-mail do SuperAdmin: ");
+    var email = Console.ReadLine()?.Trim();
+
+    if (string.IsNullOrWhiteSpace(email) ||
+        !new System.ComponentModel.DataAnnotations.EmailAddressAttribute()
+            .IsValid(email))
+    {
+        Console.WriteLine("Informe um e-mail válido.");
+        return;
+    }
+
+    Console.Write("Senha do SuperAdmin: ");
+    var password = ConsolePasswordReader.ReadPassword();
+
+    Console.Write("Confirme a senha: ");
+    var confirmPassword = ConsolePasswordReader.ReadPassword();
+
+    if (string.IsNullOrWhiteSpace(password))
+    {
+        Console.WriteLine("A senha não pode ficar vazia.");
+        return;
+    }
+
+    if (password != confirmPassword)
+    {
+        Console.WriteLine("As senhas não coincidem.");
+        return;
+    }
+
+    var rolesResult = await setupService.CreateRolesAsync();
+
+    if (!rolesResult.Succeeded)
+    {
+        Console.WriteLine("Não foi possível criar as funções:");
+
+        foreach (var error in rolesResult.Errors)
+        {
+            Console.WriteLine($"- {error.Description}");
+        }
+
+        return;
+    }
+
+    var result = await setupService.CreateSuperAdminAsync(
+        email,
+        password);
+
+    if (!result.Succeeded)
+    {
+        Console.WriteLine("Não foi possível criar o SuperAdmin:");
+
+        foreach (var error in result.Errors)
+        {
+            Console.WriteLine($"- {error.Description}");
+        }
+
+        return;
+    }
+
+    Console.WriteLine("SuperAdmin criado com sucesso!");
+    return;
+}
 // Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
