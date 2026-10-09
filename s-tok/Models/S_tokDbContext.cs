@@ -9,5 +9,7 @@ namespace s_tok.Models
             : base(options)
         {
         }
+
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }

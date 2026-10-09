@@ -1,0 +1,73 @@
+﻿@page
+@model s_tok.Pages.Equipe.IndexModel
+@{
+    ViewData["Title"] = "Equipe";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Equipe</h1>
+        <p>Gerencie os usuários e as permissões de acesso ao S-TOK.</p>
+    </div>
+
+    <a asp-page="/Equipe/Registro" class="btn btn-primary">
+        + Registrar usuário
+    </a>
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">Usuários cadastrados</h2>
+            <div class="panel-subtitle">
+                Integrantes e respectivos perfis de acesso.
+            </div>
+        </div>
+    </header>
+
+    <div class="table-responsive">
+        <table class="table table-stok">
+            <thead>
+                <tr>
+                    <th>E-MAIL</th>
+                    <th>PERFIL</th>
+                    <th>E-MAIL CONFIRMADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Usuarios.Count == 0)
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            Nenhum usuário cadastrado.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var usuario in Model.Usuarios)
+                    {
+                        <tr>
+                            <td>
+                                <span class="product-name">
+                                    @usuario.Email
+                                </span>
+                            </td>
+                            <td>@usuario.Perfil</td>
+                            <td>
+                                @if (usuario.EmailConfirmado)
+                                {
+                                    <span class="stock-badge ok">Confirmado</span>
+                                }
+                                else
+                                {
+                                    <span class="stock-badge low">Pendente</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
