@@ -1,49 +1,140 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - s_tok</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/s_tok.styles.css" asp-append-version="true" />
+
+    <title>@ViewData["Title"] - S-TOK</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/s_tok.styles.css"
+          asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">s_tok</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="app-shell">
+
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" asp-page="/Index">
+                <span class="brand-mark">S</span>
+                <span class="brand-name">S-TOK</span>
+            </a>
+
+            <div class="sidebar-caption">MENU PRINCIPAL</div>
+
+            <nav class="sidebar-nav" aria-label="Menu principal">
+                <a class="nav-item active" asp-page="/Index">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="nav-item" href="#"
+                   aria-label="Produtos, módulo ainda não disponível">
+                    <span class="nav-icon">▤</span>
+                    <span>Produtos</span>
+                </a>
+
+                <a class="nav-item" href="#"
+                   aria-label="Estoque, módulo ainda não disponível">
+                    <span class="nav-icon">▣</span>
+                    <span>Estoque</span>
+                </a>
+
+                <a class="nav-item" href="#"
+                   aria-label="Movimentações, módulo ainda não disponível">
+                    <span class="nav-icon">⇄</span>
+                    <span>Movimentações</span>
+                </a>
+
+                <div class="sidebar-caption sidebar-caption-spaced">
+                    CADASTROS
+                </div>
+
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">▧</span>
+                    <span>Categorias</span>
+                </a>
+
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">♧</span>
+                    <span>Fornecedores</span>
+                </a>
+
+                <div class="sidebar-caption sidebar-caption-spaced">
+                    ANÁLISES
+                </div>
+
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">▥</span>
+                    <span>Relatórios</span>
+                </a>
+
+                <a class="nav-item" href="#">
+                    <span class="nav-icon">⚙</span>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-mark">S</div>
+                <div>
+                    <strong>S-TOK</strong>
+                    <span>Gestão inteligente</span>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </aside>
+
+        <div class="main-area">
+            <header class="topbar">
+                <button class="menu-toggle"
+                        id="menuToggle"
+                        type="button"
+                        aria-label="Abrir ou fechar menu"
+                        aria-controls="sidebar"
+                        aria-expanded="false">
+                    ☰
+                </button>
+
+                <div class="topbar-context">
+                    <span class="topbar-label">SISTEMA DE GESTÃO</span>
+                    <span class="topbar-title">Painel administrativo</span>
+                </div>
+
+                <div class="topbar-actions">
+                    <div class="system-status">
+                        <span class="status-dot"></span>
+                        Ambiente de desenvolvimento
+                    </div>
+
+                    <div class="user-avatar"
+                         aria-label="Perfil do usuário">
+                        U
+                    </div>
+                </div>
+            </header>
+
+            <main class="page-content" role="main">
+                @RenderBody()
+            </main>
+
+            <footer class="app-footer">
+                <span>© @DateTime.Now.Year S-TOK</span>
+                <span>Gestão de estoque inteligente</span>
+            </footer>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - s_tok - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 

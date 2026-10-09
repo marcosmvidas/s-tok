@@ -1,10 +1,252 @@
 ﻿@page
-@model IndexModel
+@model s_tok.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-heading">
+    <div>
+        <h1>Dashboard</h1>
+        <p>
+            Visão geral da operação e dos indicadores do seu estoque.
+        </p>
+    </div>
+
+    <div class="page-date">
+        @DateTime.Now.ToString("dd/MM/yyyy")
+    </div>
 </div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <section class="metric-card">
+            <div class="metric-top">
+                <span class="metric-label">Total de produtos</span>
+                <span class="metric-icon blue">▤</span>
+            </div>
+            <div class="metric-value">1.284</div>
+            <div class="metric-description">
+                Produtos cadastrados — demonstração
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <section class="metric-card">
+            <div class="metric-top">
+                <span class="metric-label">Itens em estoque</span>
+                <span class="metric-icon green">▣</span>
+            </div>
+            <div class="metric-value">8.642</div>
+            <div class="metric-description">
+                Unidades disponíveis — demonstração
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <section class="metric-card">
+            <div class="metric-top">
+                <span class="metric-label">Estoque baixo</span>
+                <span class="metric-icon orange">!</span>
+            </div>
+            <div class="metric-value">12</div>
+            <div class="metric-description">
+                Itens para revisar — demonstração
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <section class="metric-card">
+            <div class="metric-top">
+                <span class="metric-label">Movimentações</span>
+                <span class="metric-icon red">⇄</span>
+            </div>
+            <div class="metric-value">56</div>
+            <div class="metric-description">
+                Registros recentes — demonstração
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-xl-7">
+        <section class="content-panel">
+            <header class="panel-header">
+                <div>
+                    <h2 class="panel-title">Movimentação de estoque</h2>
+                    <div class="panel-subtitle">
+                        Exemplo visual de entradas e saídas
+                    </div>
+                </div>
+                <span class="stock-badge ok">DEMONSTRAÇÃO</span>
+            </header>
+
+            <div class="panel-body">
+                <div class="chart-placeholder"
+                     role="img"
+                     aria-label="Gráfico ilustrativo de movimentação de estoque">
+
+                    <div class="chart-column">
+                        <div class="chart-bar" style="height: 42%"></div>
+                        <span class="chart-label">Seg</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar primary" style="height: 68%"></div>
+                        <span class="chart-label">Ter</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar" style="height: 53%"></div>
+                        <span class="chart-label">Qua</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar primary" style="height: 85%"></div>
+                        <span class="chart-label">Qui</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar" style="height: 61%"></div>
+                        <span class="chart-label">Sex</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar primary" style="height: 94%"></div>
+                        <span class="chart-label">Sáb</span>
+                    </div>
+
+                    <div class="chart-column">
+                        <div class="chart-bar" style="height: 48%"></div>
+                        <span class="chart-label">Dom</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-xl-5">
+        <section class="content-panel">
+            <header class="panel-header">
+                <div>
+                    <h2 class="panel-title">Alertas de estoque</h2>
+                    <div class="panel-subtitle">
+                        Exemplos de situações que exigem atenção
+                    </div>
+                </div>
+            </header>
+
+            <div class="table-responsive">
+                <table class="table table-stok">
+                    <thead>
+                        <tr>
+                            <th>PRODUTO</th>
+                            <th>DISPONÍVEL</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="product-name">Produto A</span>
+                                <span class="product-code">Exemplo · 001</span>
+                            </td>
+                            <td>3 un.</td>
+                            <td>
+                                <span class="stock-badge low">Estoque baixo</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="product-name">Produto B</span>
+                                <span class="product-code">Exemplo · 002</span>
+                            </td>
+                            <td>0 un.</td>
+                            <td>
+                                <span class="stock-badge out">Sem estoque</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="product-name">Produto C</span>
+                                <span class="product-code">Exemplo · 003</span>
+                            </td>
+                            <td>5 un.</td>
+                            <td>
+                                <span class="stock-badge low">Estoque baixo</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">Últimas movimentações</h2>
+            <div class="panel-subtitle">
+                Exemplo da futura listagem de entradas e saídas
+            </div>
+        </div>
+        <span class="stock-badge ok">DADOS FICTÍCIOS</span>
+    </header>
+
+    <div class="table-responsive">
+        <table class="table table-stok">
+            <thead>
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>OPERAÇÃO</th>
+                    <th>QUANTIDADE</th>
+                    <th>DATA</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="product-name">Produto A</span>
+                        <span class="product-code">Exemplo · 001</span>
+                    </td>
+                    <td>Entrada</td>
+                    <td>+ 50 un.</td>
+                    <td>09/10/2026</td>
+                    <td><span class="stock-badge ok">Registrada</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="product-name">Produto B</span>
+                        <span class="product-code">Exemplo · 002</span>
+                    </td>
+                    <td>Saída</td>
+                    <td>- 12 un.</td>
+                    <td>09/10/2026</td>
+                    <td><span class="stock-badge ok">Registrada</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="product-name">Produto C</span>
+                        <span class="product-code">Exemplo · 003</span>
+                    </td>
+                    <td>Entrada</td>
+                    <td>+ 25 un.</td>
+                    <td>08/10/2026</td>
+                    <td><span class="stock-badge ok">Registrada</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Os dados desta tela são demonstrativos.
+        // A integração com o banco será feita em uma etapa posterior.
+    </script>
+}
