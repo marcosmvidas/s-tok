@@ -82,13 +82,13 @@
                             </td>
                             <td class="text-end">
                                 <partial name="_BotoesAcoes"
-                                         model="new s_tok.Pages.Shared.AcoesListagemModel {
+                                         model="@(new s_tok.Pages.Shared.AcoesListagemModel {
                                              Id = usuario.Id,
                                              NomeRegistro = usuario.NomeCompleto,
                                              DetalhesPage = "/Equipe/Detalhes",
                                              AlterarPage = "/Equipe/Alterar",
                                              ExcluirPage = "/Equipe/Excluir"
-                                         }" />
+                                         })" />
                             </td>
                         </tr>
                     }
