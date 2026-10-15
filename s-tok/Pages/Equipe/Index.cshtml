@@ -15,6 +15,21 @@
     </a>
 </div>
 
+@if (TempData["Sucesso"] is string sucesso)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @sucesso
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+}
+@if (TempData["Erro"] is string erro)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @erro
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+}
+
 <section class="content-panel">
     <header class="panel-header">
         <div>
@@ -26,19 +41,21 @@
     </header>
 
     <div class="table-responsive">
-        <table class="table table-stok">
+        <table class="table table-stok align-middle">
             <thead>
                 <tr>
+                    <th>NOME</th>
                     <th>E-MAIL</th>
                     <th>PERFIL</th>
                     <th>E-MAIL CONFIRMADO</th>
+                    <th class="text-end">AÇÕES</th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model.Usuarios.Count == 0)
                 {
                     <tr>
-                        <td colspan="3" class="text-center">
+                        <td colspan="5" class="text-center py-4">
                             Nenhum usuário cadastrado.
                         </td>
                     </tr>
@@ -49,10 +66,9 @@
                     {
                         <tr>
                             <td>
-                                <span class="product-name">
-                                    @usuario.Email
-                                </span>
+                                <span class="product-name">@usuario.NomeCompleto</span>
                             </td>
+                            <td>@usuario.Email</td>
                             <td>@usuario.Perfil</td>
                             <td>
                                 @if (usuario.EmailConfirmado)
@@ -63,6 +79,16 @@
                                 {
                                     <span class="stock-badge low">Pendente</span>
                                 }
+                            </td>
+                            <td class="text-end">
+                                <partial name="_BotoesAcoes"
+                                         model="@(new s_tok.Pages.Shared.AcoesListagemModel {
+                                             Id = usuario.Id,
+                                             NomeRegistro = usuario.NomeCompleto,
+                                             DetalhesPage = "/Equipe/Detalhes",
+                                             AlterarPage = "/Equipe/Alterar",
+                                             ExcluirPage = "/Equipe/Excluir"
+                                         })" />
                             </td>
                         </tr>
                     }

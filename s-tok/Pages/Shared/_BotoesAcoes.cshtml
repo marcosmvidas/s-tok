@@ -1,0 +1,36 @@
+@model s_tok.Pages.Shared.AcoesListagemModel
+
+<div class="d-flex flex-wrap gap-2 acoes-listagem">
+    <a asp-page="@Model.DetalhesPage"
+       asp-route-id="@Model.Id"
+       class="btn btn-sm btn-outline-secondary"
+       aria-label="Ver detalhes de @Model.NomeRegistro"
+       title="Detalhes">
+        <span aria-hidden="true">◉</span>
+        <span>Detalhes</span>
+    </a>
+
+    <a asp-page="@Model.AlterarPage"
+       asp-route-id="@Model.Id"
+       class="btn btn-sm btn-outline-primary"
+       aria-label="Alterar @Model.NomeRegistro"
+       title="Alterar">
+        <span aria-hidden="true">✎</span>
+        <span>Alterar</span>
+    </a>
+
+    <form method="post"
+          asp-page="@Model.ExcluirPage"
+          asp-page-handler="Delete"
+          asp-route-id="@Model.Id"
+          class="d-inline"
+          onsubmit="return confirm('Tem certeza de que deseja excluir este registro? Esta ação não poderá ser desfeita.');">
+        <button type="submit"
+                class="btn btn-sm btn-outline-danger"
+                aria-label="Excluir @Model.NomeRegistro"
+                title="Excluir">
+            <span aria-hidden="true">⌫</span>
+            <span>Excluir</span>
+        </button>
+    </form>
+</div>

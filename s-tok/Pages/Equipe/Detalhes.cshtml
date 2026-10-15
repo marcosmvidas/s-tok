@@ -1,0 +1,39 @@
+@page "{id}"
+@model s_tok.Pages.Equipe.DetalhesModel
+@{
+    ViewData["Title"] = "Detalhes do usuário";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Detalhes do usuário</h1>
+        <p>Consulte os dados cadastrais e as permissões de acesso.</p>
+    </div>
+    <a asp-page="/Equipe/Index" class="btn btn-outline-secondary">Voltar para equipe</a>
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">@Model.NomeCompleto</h2>
+            <div class="panel-subtitle">Informações da conta no S-TOK.</div>
+        </div>
+    </header>
+    <div class="p-4">
+        <dl class="row mb-0">
+            <dt class="col-sm-4 mb-2">Nome completo</dt>
+            <dd class="col-sm-8 mb-3">@Model.NomeCompleto</dd>
+            <dt class="col-sm-4 mb-2">E-mail</dt>
+            <dd class="col-sm-8 mb-3">@Model.Email</dd>
+            <dt class="col-sm-4 mb-2">Nome de usuário</dt>
+            <dd class="col-sm-8 mb-3">@Model.Username</dd>
+            <dt class="col-sm-4 mb-2">Perfil de acesso</dt>
+            <dd class="col-sm-8 mb-3">@Model.Perfil</dd>
+            <dt class="col-sm-4 mb-2">E-mail confirmado</dt>
+            <dd class="col-sm-8 mb-3">@(Model.EmailConfirmado ? "Confirmado" : "Pendente")</dd>
+        </dl>
+        <div class="d-flex justify-content-end mt-4">
+            <a asp-page="/Equipe/Alterar" asp-route-id="@Model.Id" class="btn btn-primary">Alterar usuário</a>
+        </div>
+    </div>
+</section>
