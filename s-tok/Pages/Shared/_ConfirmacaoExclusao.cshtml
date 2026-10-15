@@ -1,0 +1,36 @@
+@model s_tok.Pages.Shared.ConfirmacaoExclusaoModel
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h1 class="panel-title">@Model.Titulo</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+            {
+                <p class="panel-subtitle mb-0">@Model.Descricao</p>
+            }
+        </div>
+    </header>
+
+    <div class="p-3">
+        <p>
+            Deseja realmente excluir
+            <strong>@Model.NomeRegistro</strong>?
+        </p>
+        <p class="text-danger">Esta ação não poderá ser desfeita.</p>
+
+        <form method="post"
+              asp-page-handler="@Model.Handler"
+              asp-route-id="@Model.Id">
+            <div class="d-flex flex-wrap justify-content-end gap-2">
+                <a asp-page="@Model.PaginaVoltar"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    @Model.TextoConfirmar
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
