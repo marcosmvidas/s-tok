@@ -1,0 +1,18 @@
+@model s_tok.Pages.Shared.CabecalhoPaginaModel
+
+<div class="page-heading">
+    <div>
+        <h1>@Model.Titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+        {
+            <p>@Model.Descricao</p>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.PaginaNovo))
+    {
+        <a asp-page="@Model.PaginaNovo" class="btn btn-primary">
+            + @Model.TextoBotaoNovo
+        </a>
+    }
+</div>
