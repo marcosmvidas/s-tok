@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace s_tok.Models;
 
@@ -7,6 +8,7 @@ namespace s_tok.Models;
 /// Produto cadastrado no catálogo do S-TOK.
 /// Categoria e fornecedor são textos até os módulos próprios serem implementados.
 /// </summary>
+[Index(nameof(Codigo), IsUnique = true)]
 public class Produto
 {
     public int Id { get; set; }
