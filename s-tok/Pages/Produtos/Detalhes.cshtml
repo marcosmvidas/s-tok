@@ -1,0 +1,23 @@
+@page "{id:int}"
+@model s_tok.Pages.Produtos.DetalhesModel
+@{
+    ViewData["Title"] = "Detalhes do produto";
+}
+
+<partial name="_ResumoDetalhes"
+         model="@(new s_tok.Pages.Shared.ResumoDetalhesModel {
+             Titulo = "Detalhes do produto",
+             Descricao = "Informações cadastrais e valores do produto.",
+             Id = Model.Produto.Id.ToString(),
+             PaginaVoltar = "/Produtos/Index",
+             PaginaAlterar = "/Produtos/Alterar",
+             Campos = new List<s_tok.Pages.Shared.CampoDetalheModel> {
+                 new() { Rotulo = "Nome", Valor = Model.Produto.Nome },
+                 new() { Rotulo = "Código", Valor = Model.Produto.Codigo },
+                 new() { Rotulo = "Categoria", Valor = Model.Produto.Categoria },
+                 new() { Rotulo = "Fornecedor", Valor = Model.Produto.Fornecedor },
+                 new() { Rotulo = "Preço de custo", Valor = Model.Produto.PrecoCusto.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR")) },
+                 new() { Rotulo = "Preço de venda", Valor = Model.Produto.PrecoVenda.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR")) },
+                 new() { Rotulo = "Quantidade em estoque", Valor = Model.Produto.QuantidadeEstoque.ToString() }
+             }
+         })" />
