@@ -97,6 +97,8 @@ namespace s_tok.Pages.Equipe
                 return Page();
             }
 
+            await using var transacao = await _context.Database.BeginTransactionAsync();
+
             identity.Email = Entrada.Email.Trim();
             identity.UserName = Entrada.Username.Trim();
             identity.NormalizedEmail = _userManager.NormalizeEmail(identity.Email);
@@ -128,6 +130,7 @@ namespace s_tok.Pages.Equipe
             }
 
             await _context.SaveChangesAsync();
+            await transacao.CommitAsync();
             TempData["Sucesso"] = "Usuário alterado com sucesso!";
             return RedirectToPage("/Equipe/Index");
         }
