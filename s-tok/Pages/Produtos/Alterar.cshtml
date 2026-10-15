@@ -1,0 +1,76 @@
+@page "{id:int}"
+@model s_tok.Pages.Produtos.AlterarModel
+@{
+    ViewData["Title"] = "Editar produto";
+}
+
+<partial name="_CabecalhoPagina"
+         model="@(new s_tok.Pages.Shared.CabecalhoPaginaModel {
+             Titulo = "Editar produto",
+             Descricao = "Atualize as informações do produto selecionado."
+         })" />
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">@Model.Produto.Nome</h2>
+            <div class="panel-subtitle">Código: @Model.Produto.Codigo</div>
+        </div>
+    </header>
+
+    <div class="p-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input asp-for="Produto.Id" type="hidden" />
+
+            <div class="row g-3">
+                <div class="col-12 col-md-8">
+                    <label asp-for="Produto.Nome" class="form-label"></label>
+                    <input asp-for="Produto.Nome" class="form-control" maxlength="120" />
+                    <span asp-validation-for="Produto.Nome" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="Produto.Codigo" class="form-label"></label>
+                    <input asp-for="Produto.Codigo" class="form-control" maxlength="40" />
+                    <span asp-validation-for="Produto.Codigo" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Produto.Categoria" class="form-label"></label>
+                    <input asp-for="Produto.Categoria" class="form-control" maxlength="80" />
+                    <span asp-validation-for="Produto.Categoria" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Produto.Fornecedor" class="form-label"></label>
+                    <input asp-for="Produto.Fornecedor" class="form-control" maxlength="150" />
+                    <span asp-validation-for="Produto.Fornecedor" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="Produto.PrecoCusto" class="form-label"></label>
+                    <input asp-for="Produto.PrecoCusto" class="form-control" type="number" min="0" step="0.01" />
+                    <span asp-validation-for="Produto.PrecoCusto" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="Produto.PrecoVenda" class="form-label"></label>
+                    <input asp-for="Produto.PrecoVenda" class="form-control" type="number" min="0" step="0.01" />
+                    <span asp-validation-for="Produto.PrecoVenda" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="Produto.QuantidadeEstoque" class="form-label"></label>
+                    <input asp-for="Produto.QuantidadeEstoque" class="form-control" type="number" min="0" step="1" />
+                    <span asp-validation-for="Produto.QuantidadeEstoque" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <partial name="_BotoesFormulario"
+                     model="@(new s_tok.Pages.Shared.BotoesFormularioModel {
+                         TextoSalvar = "Salvar alterações",
+                         TextoCancelar = "Cancelar",
+                         PaginaCancelar = "/Produtos/Index"
+                     })" />
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
