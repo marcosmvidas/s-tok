@@ -213,8 +213,48 @@ namespace s_tok.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("s_tok.Models.Usuario", b =>
+            modelBuilder.Entity("s_tok.Models.Produto", b =>
                 {
+                    b.Property<string>("Categoria")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Fornecedor")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PrecoCusto")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecoVenda")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("QuantidadeEstoque")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
+                    b.ToTable("Produtos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Usuario", b => {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
