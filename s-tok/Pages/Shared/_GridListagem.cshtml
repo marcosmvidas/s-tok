@@ -1,21 +1,12 @@
 @model s_tok.Pages.Shared.GridListagemModel
 
-<div class="page-heading">
-    <div>
-        <h1>@Model.Titulo</h1>
-        @if (!string.IsNullOrWhiteSpace(Model.Descricao))
-        {
-            <p>@Model.Descricao</p>
-        }
-    </div>
-
-    @if (!string.IsNullOrWhiteSpace(Model.PaginaNovo))
-    {
-        <a asp-page="@Model.PaginaNovo" class="btn btn-primary">
-            + @Model.TextoBotaoNovo
-        </a>
-    }
-</div>
+<partial name="_CabecalhoPagina"
+         model="@(new s_tok.Pages.Shared.CabecalhoPaginaModel {
+             Titulo = Model.Titulo,
+             Descricao = Model.Descricao,
+             PaginaNovo = Model.PaginaNovo,
+             TextoBotaoNovo = Model.TextoBotaoNovo
+         })" />
 
 <section class="content-panel">
     <header class="panel-header">
