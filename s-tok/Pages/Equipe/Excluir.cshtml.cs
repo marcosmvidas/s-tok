@@ -19,6 +19,8 @@ namespace s_tok.Pages.Equipe
             _context = context;
         }
 
+        public IActionResult OnGet(string? id) => RedirectToPage("/Equipe/Index");
+
         public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
