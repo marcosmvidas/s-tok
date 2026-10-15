@@ -47,12 +47,15 @@
             <tbody>
                 @{
                     var itens = Model.Itens.ToList();
+                    var temAcoes = !string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
+                        || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
+                        || !string.IsNullOrWhiteSpace(Model.PaginaExcluir);
                 }
 
                 @if (itens.Count == 0)
                 {
                     <tr>
-                        <td colspan="@(Model.Colunas.Count + ((!string.IsNullOrWhiteSpace(Model.PaginaDetalhes) || !string.IsNullOrWhiteSpace(Model.PaginaAlterar) || !string.IsNullOrWhiteSpace(Model.PaginaExcluir)) ? 1 : 0))"
+                        <td colspan="@(Model.Colunas.Count + (temAcoes ? 1 : 0))"
                             class="text-center py-4">
                             @Model.MensagemVazia
                         </td>
@@ -65,12 +68,22 @@
                         <tr>
                             @foreach (var coluna in Model.Colunas)
                             {
-                                <td class="@coluna.ClasseCss">@Model.ObterValorFormatado(item, coluna)</td>
+                                <td class="@coluna.ClasseCss">
+                                    @if (string.Equals(coluna.Formato, "email-confirmado", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        var confirmado = string.Equals(Model.ObterValorFormatado(item, coluna), "Sim", StringComparison.Ordinal);
+                                        <span class="stock-badge @(confirmado ? "ok" : "low")">
+                                            @(confirmado ? "Confirmado" : "Pendente")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @Model.ObterValorFormatado(item, coluna)
+                                    }
+                                </td>
                             }
 
-                            @if (!string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
-                              || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
-                              || !string.IsNullOrWhiteSpace(Model.PaginaExcluir))
+                            @if (temAcoes)
                             {
                                 <td class="text-end">
                                     <partial name="_BotoesAcoes"
