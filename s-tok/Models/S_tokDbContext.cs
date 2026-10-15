@@ -11,5 +11,7 @@ namespace s_tok.Models
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+
+        public DbSet<Produto> Produtos { get; set; }
     }
 }
