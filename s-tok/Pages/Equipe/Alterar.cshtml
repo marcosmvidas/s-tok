@@ -1,0 +1,64 @@
+@page "{id?}"
+@model s_tok.Pages.Equipe.AlterarModel
+@{
+    ViewData["Title"] = "Alterar usuário";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Alterar usuário</h1>
+        <p>Atualize os dados cadastrais e o perfil de acesso.</p>
+    </div>
+    <a asp-page="/Equipe/Index" class="btn btn-outline-secondary">Voltar para equipe</a>
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">Dados do usuário</h2>
+            <div class="panel-subtitle">As alterações serão aplicadas à conta selecionada.</div>
+        </div>
+    </header>
+    <div class="p-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input asp-for="Entrada.Id" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="Entrada.NomeCompleto" class="form-label"></label>
+                <input asp-for="Entrada.NomeCompleto" class="form-control" autocomplete="name" />
+                <span asp-validation-for="Entrada.NomeCompleto" class="text-danger small"></span>
+            </div>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label asp-for="Entrada.Email" class="form-label"></label>
+                    <input asp-for="Entrada.Email" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Entrada.Email" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="Entrada.Username" class="form-label"></label>
+                    <input asp-for="Entrada.Username" class="form-control" autocomplete="username" />
+                    <span asp-validation-for="Entrada.Username" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="mt-3 mb-4">
+                <label asp-for="Entrada.Perfil" class="form-label"></label>
+                <select asp-for="Entrada.Perfil" class="form-select">
+                    <option value="">Selecione um perfil</option>
+                    @foreach (var perfil in Model.PerfisDisponiveis)
+                    {
+                        <option value="@perfil">@perfil</option>
+                    }
+                </select>
+                <span asp-validation-for="Entrada.Perfil" class="text-danger small"></span>
+            </div>
+            <div class="d-flex flex-wrap justify-content-end gap-2">
+                <a asp-page="/Equipe/Index" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
