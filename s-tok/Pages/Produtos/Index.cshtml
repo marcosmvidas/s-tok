@@ -1,0 +1,31 @@
+@page
+@model s_tok.Pages.Produtos.IndexModel
+@{
+    ViewData["Title"] = "Produtos";
+}
+
+<partial name="_AlertasTempData" />
+
+<partial name="_GridListagem"
+         model="@(new s_tok.Pages.Shared.GridListagemModel {
+             Titulo = "Produtos",
+             Descricao = "Consulte e gerencie os produtos cadastrados.",
+             MensagemVazia = "Nenhum produto cadastrado.",
+             PaginaNovo = "/Produtos/Registro",
+             TextoBotaoNovo = "Novo produto",
+             PropriedadeId = "Id",
+             PropriedadeNome = "Nome",
+             PaginaDetalhes = "/Produtos/Detalhes",
+             PaginaAlterar = "/Produtos/Alterar",
+             PaginaExcluir = "/Produtos/Excluir",
+             Colunas = new List<s_tok.Pages.Shared.GridColunaModel> {
+                 new() { Titulo = "CÓDIGO", Propriedade = "Codigo" },
+                 new() { Titulo = "PRODUTO", Propriedade = "Nome", ClasseCss = "product-name" },
+                 new() { Titulo = "CATEGORIA", Propriedade = "Categoria" },
+                 new() { Titulo = "FORNECEDOR", Propriedade = "Fornecedor" },
+                 new() { Titulo = "PREÇO DE CUSTO", Propriedade = "PrecoCusto", Formato = "moeda" },
+                 new() { Titulo = "PREÇO DE VENDA", Propriedade = "PrecoVenda", Formato = "moeda" },
+                 new() { Titulo = "ESTOQUE", Propriedade = "QuantidadeEstoque" }
+             },
+             Itens = Model.Produtos.Cast<object>().ToList()
+         })" />
