@@ -1,0 +1,13 @@
+@model s_tok.Pages.Shared.BotoesFormularioModel
+
+<div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+    <a asp-page="@Model.PaginaCancelar"
+       asp-route-id="@Model.RotaIdCancelar"
+       class="btn btn-outline-secondary">
+        @Model.TextoCancelar
+    </a>
+
+    <button type="submit" class="btn btn-primary">
+        @Model.TextoSalvar
+    </button>
+</div>
