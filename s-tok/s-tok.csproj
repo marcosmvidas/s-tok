@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Authorization\" />
+    <Compile Remove="Authorization\**" />
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Authorization\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Authorization\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Authorization\**" />
+    <None Remove="Controllers\**" />
   </ItemGroup>
 
   <ItemGroup>
