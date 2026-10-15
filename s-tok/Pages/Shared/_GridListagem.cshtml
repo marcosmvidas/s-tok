@@ -1,0 +1,92 @@
+@model s_tok.Pages.Shared.GridListagemModel
+
+<div class="page-heading">
+    <div>
+        <h1>@Model.Titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+        {
+            <p>@Model.Descricao</p>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.PaginaNovo))
+    {
+        <a asp-page="@Model.PaginaNovo" class="btn btn-primary">
+            + @Model.TextoBotaoNovo
+        </a>
+    }
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">@Model.Titulo</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+            {
+                <div class="panel-subtitle">@Model.Descricao</div>
+            }
+        </div>
+    </header>
+
+    <div class="table-responsive">
+        <table class="table table-stok align-middle">
+            <thead>
+                <tr>
+                    @foreach (var coluna in Model.Colunas)
+                    {
+                        <th>@coluna.Titulo</th>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
+                      || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
+                      || !string.IsNullOrWhiteSpace(Model.PaginaExcluir))
+                    {
+                        <th class="text-end">AÇÕES</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var itens = Model.Itens.ToList();
+                }
+
+                @if (itens.Count == 0)
+                {
+                    <tr>
+                        <td colspan="@(Model.Colunas.Count + ((!string.IsNullOrWhiteSpace(Model.PaginaDetalhes) || !string.IsNullOrWhiteSpace(Model.PaginaAlterar) || !string.IsNullOrWhiteSpace(Model.PaginaExcluir)) ? 1 : 0))"
+                            class="text-center py-4">
+                            @Model.MensagemVazia
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in itens)
+                    {
+                        <tr>
+                            @foreach (var coluna in Model.Colunas)
+                            {
+                                <td class="@coluna.ClasseCss">@Model.ObterValorFormatado(item, coluna)</td>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
+                              || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
+                              || !string.IsNullOrWhiteSpace(Model.PaginaExcluir))
+                            {
+                                <td class="text-end">
+                                    <partial name="_BotoesAcoes"
+                                             model="@(new s_tok.Pages.Shared.AcoesListagemModel {
+                                                 Id = Model.ObterId(item),
+                                                 NomeRegistro = Model.ObterNome(item),
+                                                 DetalhesPage = Model.PaginaDetalhes ?? string.Empty,
+                                                 AlterarPage = Model.PaginaAlterar ?? string.Empty,
+                                                 ExcluirPage = Model.PaginaExcluir ?? string.Empty
+                                             })" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
