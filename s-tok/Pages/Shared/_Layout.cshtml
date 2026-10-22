@@ -13,10 +13,6 @@
           href="~/css/site.css"
           asp-append-version="true" />
 
-    <link rel="stylesheet"
-          href="~/s_tok.styles.css"
-          asp-append-version="true" />
-
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
@@ -123,6 +119,11 @@
                          aria-label="Perfil do usuário">
                         U
                     </div>
+
+                    <form method="post" asp-page="/Account/Logout">
+                        <button type="submit" class="btn btn-link">Sair</button>
+                    </form>
+
                 </div>
             </header>
 

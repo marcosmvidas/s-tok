@@ -1,5 +1,4 @@
-﻿javascript
-(() => {
+﻿(() => {
     const toggle = document.getElementById("menuToggle");
     const overlay = document.getElementById("sidebarOverlay");
 
