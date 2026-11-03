@@ -18,7 +18,9 @@ public class IndexModel(S_tokDbContext context) : PageModel
             {
                 Id = c.Id,
                 Pessoa = c.Pessoa.Nome,
-                Tipo = c.Tipo == s_tok.Models.Enums.TipoContato.Telefone ? "Telefone"\n                    : c.Tipo == s_tok.Models.Enums.TipoContato.WhatsApp ? "WhatsApp"\n                    : c.Tipo == s_tok.Models.Enums.TipoContato.Email ? "e-mail" : "Outro",
+                Tipo = c.Tipo == s_tok.Models.Enums.TipoContato.Telefone ? "Telefone"
+                    : c.Tipo == s_tok.Models.Enums.TipoContato.WhatsApp ? "WhatsApp"
+                    : c.Tipo == s_tok.Models.Enums.TipoContato.Email ? "e-mail" : "Outro",
                 Valor = c.Valor,
                 Observacao = c.Observacao ?? "—"
             })
