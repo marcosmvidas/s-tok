@@ -4,236 +4,142 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
-using s_tok.Models.Enums;
+using s_tok.Pages.Shared;
 
-namespace s_tok.Pages.Cliente
+namespace s_tok.Pages.Cliente;
+
+public class RegistroModel(S_tokDbContext context) : PageModel
 {
-    public class RegistroModel : PageModel
-    {
-        private readonly S_tokDbContext _context;
+    [BindProperty]
+    public CadastroInput Input { get; set; } = new();
 
-        public RegistroModel(S_tokDbContext context)
+    public List<SelectListItem> PessoasDisponiveis { get; private set; } = [];
+    public DadosComplementaresPessoaModel? DadosComplementares { get; private set; }
+
+    public async Task<IActionResult> OnGetAsync(int? pessoaId)
+    {
+        if (pessoaId.HasValue)
         {
-            _context = context;
+            var pessoa = await context.Pessoas.AsNoTracking()
+                .Where(p => p.Id == pessoaId.Value && context.Clientes.Any(c => c.PessoaId == p.Id))
+                .Select(p => new { p.Id, p.Nome })
+                .FirstOrDefaultAsync();
+
+            if (pessoa is null)
+                return NotFound();
+
+            DadosComplementares = await MontarDadosComplementaresAsync(pessoa.Id, pessoa.Nome, "/Cliente/Index");
+            return Page();
         }
 
-        [BindProperty]
-        public CadastroInput Input { get; set; } = new();
+        await CarregarPessoasAsync();
+        return Page();
+    }
 
-        public List<SelectListItem> PessoasDisponiveis { get; set; } = [];
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var pessoaExistente = Input.PessoaId.HasValue;
+        if (!pessoaExistente && string.IsNullOrWhiteSpace(Input.Nome))
+            ModelState.AddModelError("Input.Nome", "Informe o nome da pessoa ou selecione uma pessoa existente.");
 
-        public async Task OnGetAsync()
+        if (!ModelState.IsValid)
         {
             await CarregarPessoasAsync();
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        Pessoa pessoa;
+        if (pessoaExistente)
         {
-            var pessoaExistente = Input.PessoaId.HasValue;
-            var nomeInformado = !string.IsNullOrWhiteSpace(Input.Nome);
+            pessoa = await context.Pessoas.FirstOrDefaultAsync(p => p.Id == Input.PessoaId!.Value)
+                ?? null!;
 
-            if (!pessoaExistente && !nomeInformado)
-                ModelState.AddModelError("Input.PessoaId", "Selecione uma pessoa existente ou informe o nome de uma nova pessoa.");
-
-            var documentoNumero = NormalizarDigitos(Input.DocumentoNumero);
-            var contatoValor = Input.ContatoValor?.Trim();
-            var possuiEndereco = new[]
+            if (pessoa is null)
             {
-                Input.Logradouro, Input.Numero, Input.Complemento,
-                Input.Bairro, Input.Cidade, Input.Uf, Input.Cep
-            }.Any(valor => !string.IsNullOrWhiteSpace(valor));
-
-            if (!pessoaExistente && !string.IsNullOrWhiteSpace(documentoNumero))
-            {
-                if (Input.TipoDocumento == TipoDocumento.Cpf && documentoNumero.Length != 11)
-                    ModelState.AddModelError("Input.DocumentoNumero", "O CPF deve conter 11 dígitos.");
-
-                if (Input.TipoDocumento == TipoDocumento.Cnpj && documentoNumero.Length != 14)
-                    ModelState.AddModelError("Input.DocumentoNumero", "O CNPJ deve conter 14 dígitos.");
-
-                if (await _context.Documentos.AnyAsync(d => d.Numero == documentoNumero))
-                    ModelState.AddModelError("Input.DocumentoNumero", "Este documento já está vinculado a outra pessoa.");
-            }
-
-            if (!pessoaExistente && Input.TipoContato == TipoContato.Email &&
-                !string.IsNullOrWhiteSpace(contatoValor) &&
-                !new EmailAddressAttribute().IsValid(contatoValor))
-                ModelState.AddModelError("Input.ContatoValor", "Informe um endereço de e-mail válido.");
-
-            if (!pessoaExistente && possuiEndereco)
-            {
-                if (string.IsNullOrWhiteSpace(Input.Logradouro))
-                    ModelState.AddModelError("Input.Logradouro", "Informe o logradouro.");
-                if (string.IsNullOrWhiteSpace(Input.Bairro))
-                    ModelState.AddModelError("Input.Bairro", "Informe o bairro.");
-                if (string.IsNullOrWhiteSpace(Input.Cidade))
-                    ModelState.AddModelError("Input.Cidade", "Informe a cidade.");
-                if (string.IsNullOrWhiteSpace(Input.Uf) || Input.Uf.Trim().Length != 2)
-                    ModelState.AddModelError("Input.Uf", "Informe a UF com duas letras.");
-            }
-
-            if (!ModelState.IsValid)
-            {
+                ModelState.AddModelError("Input.PessoaId", "A pessoa selecionada não foi encontrada.");
                 await CarregarPessoasAsync();
                 return Page();
             }
 
-            Pessoa pessoa;
-
-            if (pessoaExistente)
+            if (await context.Clientes.AnyAsync(c => c.PessoaId == pessoa.Id))
             {
-                pessoa = await _context.Pessoas
-                    .FirstOrDefaultAsync(p => p.Id == Input.PessoaId!.Value)
-                    ?? null!;
-
-                if (pessoa is null)
-                {
-                    ModelState.AddModelError("Input.PessoaId", "A pessoa selecionada não foi encontrada.");
-                    await CarregarPessoasAsync();
-                    return Page();
-                }
-
-                if (await _context.Clientes.AnyAsync(c => c.PessoaId == pessoa.Id))
-                {
-                    ModelState.AddModelError("Input.PessoaId", "Esta pessoa já está cadastrada como cliente.");
-                    await CarregarPessoasAsync();
-                    return Page();
-                }
-            }
-            else
-            {
-                pessoa = new Pessoa
-                {
-                    Nome = Input.Nome!.Trim(),
-                    CriadoEm = DateTime.UtcNow
-                };
-
-                if (!string.IsNullOrWhiteSpace(documentoNumero))
-                    pessoa.Documento = new Documento { Tipo = Input.TipoDocumento, Numero = documentoNumero };
-
-                if (!string.IsNullOrWhiteSpace(contatoValor))
-                    pessoa.Contatos.Add(new Contato { Tipo = Input.TipoContato, Valor = contatoValor });
-
-                if (possuiEndereco)
-                {
-                    pessoa.Enderecos.Add(new Endereco
-                    {
-                        Logradouro = Input.Logradouro!.Trim(),
-                        Numero = TextoOuNull(Input.Numero),
-                        Complemento = TextoOuNull(Input.Complemento),
-                        Bairro = Input.Bairro!.Trim(),
-                        Cidade = Input.Cidade!.Trim(),
-                        Uf = Input.Uf!.Trim().ToUpperInvariant(),
-                        Cep = NormalizarCep(Input.Cep),
-                        Principal = true
-                    });
-                }
-
-                _context.Pessoas.Add(pessoa);
-            }
-
-            _context.Clientes.Add(new s_tok.Models.Cliente
-            {
-                Pessoa = pessoa,
-                Ativo = Input.Ativo,
-                Observacao = TextoOuNull(Input.Observacao)
-            });
-
-            try
-            {
-                // Pessoa, seus dados complementares e Cliente são persistidos juntos.
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError(string.Empty, "Não foi possível salvar o cliente. Verifique se o documento ou o vínculo já existe.");
+                ModelState.AddModelError("Input.PessoaId", "Esta pessoa já está cadastrada como cliente.");
                 await CarregarPessoasAsync();
                 return Page();
             }
-
-            TempData["Sucesso"] = "Cliente cadastrado com sucesso!";
-            return RedirectToPage("/Cliente/Index");
         }
-
-        private async Task CarregarPessoasAsync()
+        else
         {
-            PessoasDisponiveis = await _context.Pessoas
-                .AsNoTracking()
-                .Where(p => !_context.Clientes.Any(c => c.PessoaId == p.Id))
-                .OrderBy(p => p.Nome)
-                .Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Nome })
-                .ToListAsync();
+            pessoa = new Pessoa
+            {
+                Nome = Input.Nome!.Trim(),
+                CriadoEm = DateTime.UtcNow
+            };
+            context.Pessoas.Add(pessoa);
         }
 
-        private static string NormalizarDigitos(string? valor) =>
-            new((valor ?? string.Empty).Where(char.IsDigit).ToArray());
-
-        private static string? NormalizarCep(string? valor)
+        context.Clientes.Add(new s_tok.Models.Cliente
         {
-            var digitos = NormalizarDigitos(valor);
-            return digitos.Length == 8 ? digitos : TextoOuNull(valor);
-        }
+            Pessoa = pessoa,
+            Ativo = Input.Ativo,
+            Observacao = TextoOuNull(Input.Observacao)
+        });
 
-        private static string? TextoOuNull(string? valor) =>
-            string.IsNullOrWhiteSpace(valor) ? null : valor.Trim();
-
-        public class CadastroInput
+        try
         {
-            [Display(Name = "Pessoa já cadastrada")]
-            public int? PessoaId { get; set; }
-
-            [StringLength(150, ErrorMessage = "O nome deve ter no máximo 150 caracteres.")]
-            [Display(Name = "Nome da nova pessoa")]
-            public string? Nome { get; set; }
-
-            [Display(Name = "Tipo de documento")]
-            public TipoDocumento TipoDocumento { get; set; } = TipoDocumento.Cpf;
-
-            [StringLength(20)]
-            [Display(Name = "Número do documento")]
-            public string? DocumentoNumero { get; set; }
-
-            [Display(Name = "Tipo de contato")]
-            public TipoContato TipoContato { get; set; } = TipoContato.Telefone;
-
-            [StringLength(150)]
-            [Display(Name = "Telefone, WhatsApp ou e-mail")]
-            public string? ContatoValor { get; set; }
-
-            [StringLength(150)]
-            [Display(Name = "Logradouro")]
-            public string? Logradouro { get; set; }
-
-            [StringLength(30)]
-            [Display(Name = "Número")]
-            public string? Numero { get; set; }
-
-            [StringLength(100)]
-            [Display(Name = "Complemento")]
-            public string? Complemento { get; set; }
-
-            [StringLength(80)]
-            [Display(Name = "Bairro")]
-            public string? Bairro { get; set; }
-
-            [StringLength(80)]
-            [Display(Name = "Cidade")]
-            public string? Cidade { get; set; }
-
-            [StringLength(2)]
-            [Display(Name = "UF")]
-            public string? Uf { get; set; }
-
-            [StringLength(9)]
-            [Display(Name = "CEP")]
-            public string? Cep { get; set; }
-
-            [Display(Name = "Cliente ativo")]
-            public bool Ativo { get; set; } = true;
-
-            [StringLength(250)]
-            [Display(Name = "Observações")]
-            public string? Observacao { get; set; }
+            await context.SaveChangesAsync();
         }
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError(string.Empty, "Não foi possível salvar o cliente. Verifique se a pessoa já está vinculada.");
+            await CarregarPessoasAsync();
+            return Page();
+        }
+
+        TempData["Sucesso"] = "Dados principais do cliente salvos. Agora você pode incluir documento, contatos e endereços.";
+        return RedirectToPage("/Cliente/Registro", new { pessoaId = pessoa.Id });
+    }
+
+    private async Task<DadosComplementaresPessoaModel> MontarDadosComplementaresAsync(
+        int pessoaId, string nome, string paginaConcluir)
+    {
+        return new DadosComplementaresPessoaModel
+        {
+            PessoaId = pessoaId,
+            NomePessoa = nome,
+            PaginaConcluir = paginaConcluir,
+            PossuiDocumento = await context.Documentos.AnyAsync(d => d.PessoaId == pessoaId),
+            QuantidadeContatos = await context.Contatos.CountAsync(c => c.PessoaId == pessoaId),
+            QuantidadeEnderecos = await context.Enderecos.CountAsync(e => e.PessoaId == pessoaId)
+        };
+    }
+
+    private async Task CarregarPessoasAsync()
+    {
+        PessoasDisponiveis = await context.Pessoas.AsNoTracking()
+            .Where(p => !context.Clientes.Any(c => c.PessoaId == p.Id))
+            .OrderBy(p => p.Nome)
+            .Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Nome })
+            .ToListAsync();
+    }
+
+    private static string? TextoOuNull(string? valor) =>
+        string.IsNullOrWhiteSpace(valor) ? null : valor.Trim();
+
+    public sealed class CadastroInput
+    {
+        [Display(Name = "Pessoa já cadastrada")]
+        public int? PessoaId { get; set; }
+
+        [StringLength(150, ErrorMessage = "O nome deve ter no máximo 150 caracteres.")]
+        [Display(Name = "Nome da nova pessoa")]
+        public string? Nome { get; set; }
+
+        [Display(Name = "Cliente ativo")]
+        public bool Ativo { get; set; } = true;
+
+        [StringLength(250)]
+        [Display(Name = "Observações")]
+        public string? Observacao { get; set; }
     }
 }

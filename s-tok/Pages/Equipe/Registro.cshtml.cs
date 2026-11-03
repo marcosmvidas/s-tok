@@ -5,180 +5,168 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
+using s_tok.Pages.Shared;
 
-namespace s_tok.Pages.Equipe
+namespace s_tok.Pages.Equipe;
+
+[Authorize(Roles = "SuperAdmin,Admin")]
+public class RegistroModel(
+    UserManager<IdentityUser> userManager,
+    S_tokDbContext context) : PageModel
 {
-    [Authorize(Roles = "SuperAdmin,Admin")]
-    public class RegistroModel : PageModel
+    [BindProperty]
+    public EntradaRegistro Entrada { get; set; } = new();
+
+    public List<string> PerfisDisponiveis { get; private set; } = [];
+    public DadosComplementaresPessoaModel? DadosComplementares { get; private set; }
+
+    private Task CarregarPerfisAsync()
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly S_tokDbContext _context;
+        PerfisDisponiveis = User.IsInRole("SuperAdmin")
+            ? ["Admin", "Operador"]
+            : ["Operador"];
+        return Task.CompletedTask;
+    }
 
-        public RegistroModel(
-            UserManager<IdentityUser> userManager,
-            S_tokDbContext context)
+    public async Task<IActionResult> OnGetAsync(int? pessoaId)
+    {
+        await CarregarPerfisAsync();
+
+        if (pessoaId.HasValue)
         {
-            _userManager = userManager;
-            _context = context;
-        }
+            var pessoa = await context.Pessoas.AsNoTracking()
+                .Where(p => p.Id == pessoaId.Value && context.Equipe.Any(e => e.PessoaId == p.Id))
+                .Select(p => new { p.Id, p.Nome })
+                .FirstOrDefaultAsync();
 
-        [BindProperty]
-        public EntradaRegistro Entrada { get; set; } = new();
+            if (pessoa is null)
+                return NotFound();
 
-        public List<string> PerfisDisponiveis { get; private set; } = [];
-
-        private async Task CarregarPerfisAsync()
-        {
-            PerfisDisponiveis = User.IsInRole("SuperAdmin")
-                ? ["Admin", "Operador"]
-                : ["Operador"];
-
-            await Task.CompletedTask;
-        }
-
-        public async Task OnGetAsync()
-        {
-            await CarregarPerfisAsync();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await CarregarPerfisAsync();
-
-            if (!ModelState.IsValid)
-                return Page();
-
-            if (!PerfisDisponiveis.Contains(Entrada.Perfil))
+            DadosComplementares = new DadosComplementaresPessoaModel
             {
-                ModelState.AddModelError(
-                    "Entrada.Perfil",
-                    "Você não tem permissão para atribuir esse perfil.");
-
-                return Page();
-            }
-
-            var emailExistente = await _userManager.FindByEmailAsync(
-                Entrada.Email);
-
-            if (emailExistente != null)
-            {
-                ModelState.AddModelError(
-                    "Entrada.Email",
-                    "Este e-mail já está cadastrado.");
-
-                return Page();
-            }
-
-            var usuarioIdentity = new IdentityUser
-            {
-                UserName = Entrada.Username,
-                Email = Entrada.Email,
-                EmailConfirmed = false
+                PessoaId = pessoa.Id,
+                NomePessoa = pessoa.Nome,
+                PaginaConcluir = "/Equipe/Index",
+                PossuiDocumento = await context.Documentos.AnyAsync(d => d.PessoaId == pessoa.Id),
+                QuantidadeContatos = await context.Contatos.CountAsync(c => c.PessoaId == pessoa.Id),
+                QuantidadeEnderecos = await context.Enderecos.CountAsync(e => e.PessoaId == pessoa.Id)
             };
+        }
 
-            using var transacao = await _context.Database.BeginTransactionAsync();
+        return Page();
+    }
 
-            try
-            {
-                var resultado = await _userManager.CreateAsync(
-                    usuarioIdentity,
-                    Entrada.Senha);
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await CarregarPerfisAsync();
 
-                if (!resultado.Succeeded)
-                {
-                    await transacao.RollbackAsync();
+        if (!ModelState.IsValid)
+            return Page();
 
-                    foreach (var erro in resultado.Errors)
-                    {
-                        ModelState.AddModelError(
-                            string.Empty,
-                            erro.Description);
-                    }
+        if (!PerfisDisponiveis.Contains(Entrada.Perfil))
+        {
+            ModelState.AddModelError("Entrada.Perfil", "Você não tem permissão para atribuir esse perfil.");
+            return Page();
+        }
 
-                    return Page();
-                }
+        if (await userManager.FindByEmailAsync(Entrada.Email) is not null)
+        {
+            ModelState.AddModelError("Entrada.Email", "Este e-mail já está cadastrado.");
+            return Page();
+        }
 
-                var usuario = new Usuario
-                {
-                    NomeCompleto = Entrada.NomeCompleto,
-                    IdentityUserId = usuarioIdentity.Id
-                };
+        var usuarioIdentity = new IdentityUser
+        {
+            UserName = Entrada.Username,
+            Email = Entrada.Email,
+            EmailConfirmed = false
+        };
 
-                _context.Usuarios.Add(usuario);
-
-                var resultadoPerfil = await _userManager.AddToRoleAsync(
-                    usuarioIdentity,
-                    Entrada.Perfil);
-
-                if (!resultadoPerfil.Succeeded)
-                {
-                    await _userManager.DeleteAsync(usuarioIdentity);
-                    await transacao.RollbackAsync();
-
-                    foreach (var erro in resultadoPerfil.Errors)
-                    {
-                        ModelState.AddModelError(
-                            string.Empty,
-                            erro.Description);
-                    }
-
-                    return Page();
-                }
-
-                await _context.SaveChangesAsync();
-                await transacao.CommitAsync();
-
-                TempData["Sucesso"] =
-                    "Usuário registrado com sucesso!";
-
-                return RedirectToPage("/Equipe/Index");
-            }
-            catch
+        await using var transacao = await context.Database.BeginTransactionAsync();
+        try
+        {
+            var resultado = await userManager.CreateAsync(usuarioIdentity, Entrada.Senha);
+            if (!resultado.Succeeded)
             {
                 await transacao.RollbackAsync();
-
-                await _userManager.DeleteAsync(usuarioIdentity);
-
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Não foi possível concluir o cadastro. Verifique os dados e tente novamente.");
-
+                foreach (var erro in resultado.Errors)
+                    ModelState.AddModelError(string.Empty, erro.Description);
                 return Page();
             }
-        }
 
-        public class EntradaRegistro
+            var pessoa = new Pessoa
+            {
+                Nome = Entrada.NomeCompleto.Trim(),
+                CriadoEm = DateTime.UtcNow
+            };
+
+            context.Pessoas.Add(pessoa);
+            context.Usuarios.Add(new Usuario
+            {
+                NomeCompleto = Entrada.NomeCompleto.Trim(),
+                IdentityUserId = usuarioIdentity.Id,
+                Pessoa = pessoa
+            });
+            context.Equipe.Add(new Equipe
+            {
+                Pessoa = pessoa,
+                Ativo = true
+            });
+
+            var resultadoPerfil = await userManager.AddToRoleAsync(usuarioIdentity, Entrada.Perfil);
+            if (!resultadoPerfil.Succeeded)
+            {
+                await transacao.RollbackAsync();
+                foreach (var erro in resultadoPerfil.Errors)
+                    ModelState.AddModelError(string.Empty, erro.Description);
+                return Page();
+            }
+
+            await context.SaveChangesAsync();
+            await transacao.CommitAsync();
+
+            TempData["Sucesso"] = "Acesso e cadastro da equipe criados. Agora você pode incluir documento, contatos e endereços.";
+            return RedirectToPage("/Equipe/Registro", new { pessoaId = pessoa.Id });
+        }
+        catch
         {
-            [Required(ErrorMessage = "Informe o nome completo.")]
-            [StringLength(150)]
-            [Display(Name = "Nome completo")]
-            public string NomeCompleto { get; set; } = string.Empty;
-
-            [Required(ErrorMessage = "Informe o e-mail.")]
-            [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
-            [Display(Name = "E-mail")]
-            public string Email { get; set; } = string.Empty;
-
-            [Required(ErrorMessage = "Informe o nome de usuário.")]
-            [StringLength(50, MinimumLength = 3)]
-            [Display(Name = "Nome de usuário")]
-            public string Username { get; set; } = string.Empty;
-
-            [Required(ErrorMessage = "Informe a senha.")]
-            [DataType(DataType.Password)]
-            [Display(Name = "Senha")]
-            public string Senha { get; set; } = string.Empty;
-
-            [Required(ErrorMessage = "Confirme a senha.")]
-            [Compare(nameof(Senha),
-                ErrorMessage = "As senhas não coincidem.")]
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirmar senha")]
-            public string ConfirmarSenha { get; set; } = string.Empty;
-
-            [Required(ErrorMessage = "Selecione um perfil.")]
-            [Display(Name = "Perfil de acesso")]
-            public string Perfil { get; set; } = string.Empty;
+            await transacao.RollbackAsync();
+            ModelState.AddModelError(string.Empty,
+                "Não foi possível concluir o cadastro. Verifique os dados e tente novamente.");
+            return Page();
         }
+    }
+
+    public sealed class EntradaRegistro
+    {
+        [Required(ErrorMessage = "Informe o nome completo.")]
+        [StringLength(150)]
+        [Display(Name = "Nome completo")]
+        public string NomeCompleto { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Informe o e-mail.")]
+        [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+        [Display(Name = "E-mail")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Informe o nome de usuário.")]
+        [StringLength(50, MinimumLength = 3)]
+        [Display(Name = "Nome de usuário")]
+        public string Username { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Informe a senha.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Senha")]
+        public string Senha { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Confirme a senha.")]
+        [Compare(nameof(Senha), ErrorMessage = "As senhas não coincidem.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar senha")]
+        public string ConfirmarSenha { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Selecione um perfil.")]
+        [Display(Name = "Perfil de acesso")]
+        public string Perfil { get; set; } = string.Empty;
     }
 }

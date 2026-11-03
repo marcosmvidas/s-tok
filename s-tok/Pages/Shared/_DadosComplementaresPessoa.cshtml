@@ -1,0 +1,169 @@
+@model s_tok.Pages.Shared.DadosComplementaresPessoaModel
+@using s_tok.Models.Enums
+
+@Html.AntiForgeryToken()
+
+@if (TempData["Sucesso"] is string sucesso)
+{
+    <div class="alert alert-success" role="status">@sucesso</div>
+}
+
+<section class="mt-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+        <div>
+            <h3 class="h5 mb-1">Dados complementares de @Model.NomePessoa</h3>
+            <p class="text-muted small mb-0">Adicione os dados vinculados à mesma pessoa.</p>
+        </div>
+        <a asp-page="@Model.PaginaConcluir" class="btn btn-outline-secondary btn-sm">Concluir depois</a>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+                <div class="fw-semibold mb-1">Documento</div>
+                <div class="small text-muted mb-3">@(Model.PossuiDocumento ? "Documento já cadastrado" : "Nenhum documento cadastrado")</div>
+                @if (!Model.PossuiDocumento)
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocumento">+ Documento</button>
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+                <div class="fw-semibold mb-1">Contatos</div>
+                <div class="small text-muted mb-3">@Model.QuantidadeContatos contato(s) cadastrado(s)</div>
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalContato">+ Contato</button>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+                <div class="fw-semibold mb-1">Endereços</div>
+                <div class="small text-muted mb-3">@Model.QuantidadeEnderecos endereço(s) cadastrado(s)</div>
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEndereco">+ Endereço</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modalDocumento" tabindex="-1" aria-labelledby="modalDocumentoTitulo" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" data-modal-endpoint="/Pessoa/DadosComplementares?handler=Documento">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDocumentoTitulo">Adicionar documento</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="PessoaId" value="@Model.PessoaId" />
+                <div class="mb-3">
+                    <label class="form-label">Tipo de documento</label>
+                    <select class="form-select" name="Tipo">
+                        @foreach (var tipo in Enum.GetValues<TipoDocumento>())
+                        {
+                            <option value="@((int)tipo)">@tipo</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Número</label>
+                    <input class="form-control" name="Numero" maxlength="20" autocomplete="off" />
+                </div>
+                <div class="alert alert-danger d-none mt-3 mb-0" role="alert" data-modal-erro></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-modal-salvar>Salvar documento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalContato" tabindex="-1" aria-labelledby="modalContatoTitulo" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" data-modal-endpoint="/Pessoa/DadosComplementares?handler=Contato">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContatoTitulo">Adicionar contato</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="PessoaId" value="@Model.PessoaId" />
+                <div class="mb-3">
+                    <label class="form-label">Tipo de contato</label>
+                    <select class="form-select" name="Tipo">
+                        @foreach (var tipo in Enum.GetValues<TipoContato>())
+                        {
+                            <option value="@((int)tipo)">@tipo</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Telefone, WhatsApp ou e-mail</label>
+                    <input class="form-control" name="Valor" maxlength="150" />
+                </div>
+                <div>
+                    <label class="form-label">Observação</label>
+                    <input class="form-control" name="Observacao" maxlength="250" />
+                </div>
+                <div class="alert alert-danger d-none mt-3 mb-0" role="alert" data-modal-erro></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-modal-salvar>Salvar contato</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEndereco" tabindex="-1" aria-labelledby="modalEnderecoTitulo" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" data-modal-endpoint="/Pessoa/DadosComplementares?handler=Endereco">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEnderecoTitulo">Adicionar endereço</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="PessoaId" value="@Model.PessoaId" />
+                <div class="row g-3">
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Logradouro</label>
+                        <input class="form-control" name="Logradouro" maxlength="150" />
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Número</label>
+                        <input class="form-control" name="Numero" maxlength="30" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Complemento</label>
+                        <input class="form-control" name="Complemento" maxlength="100" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Bairro</label>
+                        <input class="form-control" name="Bairro" maxlength="80" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Cidade</label>
+                        <input class="form-control" name="Cidade" maxlength="80" />
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label">UF</label>
+                        <input class="form-control text-uppercase" name="Uf" maxlength="2" />
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">CEP</label>
+                        <input class="form-control" name="Cep" maxlength="9" inputmode="numeric" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="Principal" value="true" />
+                            <label class="form-check-label">Endereço principal</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger d-none mt-3 mb-0" role="alert" data-modal-erro></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-modal-salvar>Salvar endereço</button>
+            </div>
+        </div>
+    </div>
+</div>
