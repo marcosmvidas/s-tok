@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
 using s_tok.Models.Enums;
 
-namespace s_tok.Pages.Fornecedors
+namespace s_tok.Pages.Fornecedores
 {
     public class RegistroModel : PageModel
     {
@@ -33,11 +33,7 @@ namespace s_tok.Pages.Fornecedors
             var nomeInformado = !string.IsNullOrWhiteSpace(Input.Nome);
 
             if (pessoaExistente == nomeInformado)
-            {
-                ModelState.AddModelError(
-                    nameof(Input.PessoaId),
-                    "Selecione uma pessoa existente ou informe o nome de uma nova pessoa.");
-            }
+                ModelState.AddModelError("Input.PessoaId", "Selecione uma pessoa existente ou informe o nome de uma nova pessoa.");
 
             var documentoNumero = NormalizarDigitos(Input.DocumentoNumero);
             var contatoValor = Input.ContatoValor?.Trim();
@@ -50,28 +46,30 @@ namespace s_tok.Pages.Fornecedors
             if (!pessoaExistente && !string.IsNullOrWhiteSpace(documentoNumero))
             {
                 if (Input.TipoDocumento == TipoDocumento.Cpf && documentoNumero.Length != 11)
-                    ModelState.AddModelError(nameof(Input.DocumentoNumero), "O CPF deve conter 11 dígitos.");
+                    ModelState.AddModelError("Input.DocumentoNumero", "O CPF deve conter 11 dígitos.");
 
                 if (Input.TipoDocumento == TipoDocumento.Cnpj && documentoNumero.Length != 14)
-                    ModelState.AddModelError(nameof(Input.DocumentoNumero), "O CNPJ deve conter 14 dígitos.");
+                    ModelState.AddModelError("Input.DocumentoNumero", "O CNPJ deve conter 14 dígitos.");
 
                 if (await _context.Documentos.AnyAsync(d => d.Numero == documentoNumero))
-                    ModelState.AddModelError(nameof(Input.DocumentoNumero), "Este documento já está vinculado a outra pessoa.");
+                    ModelState.AddModelError("Input.DocumentoNumero", "Este documento já está vinculado a outra pessoa.");
             }
+
+            if (!pessoaExistente && Input.TipoContato == TipoContato.Email &&
+                !string.IsNullOrWhiteSpace(contatoValor) &&
+                !new EmailAddressAttribute().IsValid(contatoValor))
+                ModelState.AddModelError("Input.ContatoValor", "Informe um endereço de e-mail válido.");
 
             if (!pessoaExistente && possuiEndereco)
             {
                 if (string.IsNullOrWhiteSpace(Input.Logradouro))
-                    ModelState.AddModelError(nameof(Input.Logradouro), "Informe o logradouro.");
-
+                    ModelState.AddModelError("Input.Logradouro", "Informe o logradouro.");
                 if (string.IsNullOrWhiteSpace(Input.Bairro))
-                    ModelState.AddModelError(nameof(Input.Bairro), "Informe o bairro.");
-
+                    ModelState.AddModelError("Input.Bairro", "Informe o bairro.");
                 if (string.IsNullOrWhiteSpace(Input.Cidade))
-                    ModelState.AddModelError(nameof(Input.Cidade), "Informe a cidade.");
-
+                    ModelState.AddModelError("Input.Cidade", "Informe a cidade.");
                 if (string.IsNullOrWhiteSpace(Input.Uf) || Input.Uf.Trim().Length != 2)
-                    ModelState.AddModelError(nameof(Input.Uf), "Informe a UF com duas letras.");
+                    ModelState.AddModelError("Input.Uf", "Informe a UF com duas letras.");
             }
 
             if (!ModelState.IsValid)
@@ -90,14 +88,14 @@ namespace s_tok.Pages.Fornecedors
 
                 if (pessoa is null)
                 {
-                    ModelState.AddModelError(nameof(Input.PessoaId), "A pessoa selecionada não foi encontrada.");
+                    ModelState.AddModelError("Input.PessoaId", "A pessoa selecionada não foi encontrada.");
                     await CarregarPessoasAsync();
                     return Page();
                 }
 
-                if (await _context.Fornecedors.AnyAsync(c => f.PessoaId == pessoa.Id))
+                if (await _context.Fornecedores.AnyAsync(f => f.PessoaId == pessoa.Id))
                 {
-                    ModelState.AddModelError(nameof(Input.PessoaId), "Esta pessoa já está cadastrada como fornecedor.");
+                    ModelState.AddModelError("Input.PessoaId", "Esta pessoa já está cadastrada como fornecedor.");
                     await CarregarPessoasAsync();
                     return Page();
                 }
@@ -111,22 +109,10 @@ namespace s_tok.Pages.Fornecedors
                 };
 
                 if (!string.IsNullOrWhiteSpace(documentoNumero))
-                {
-                    pessoa.Documento = new Documento
-                    {
-                        Tipo = Input.TipoDocumento,
-                        Numero = documentoNumero
-                    };
-                }
+                    pessoa.Documento = new Documento { Tipo = Input.TipoDocumento, Numero = documentoNumero };
 
                 if (!string.IsNullOrWhiteSpace(contatoValor))
-                {
-                    pessoa.Contatos.Add(new Contato
-                    {
-                        Tipo = Input.TipoContato,
-                        Valor = contatoValor
-                    });
-                }
+                    pessoa.Contatos.Add(new Contato { Tipo = Input.TipoContato, Valor = contatoValor });
 
                 if (possuiEndereco)
                 {
@@ -146,7 +132,7 @@ namespace s_tok.Pages.Fornecedors
                 _context.Pessoas.Add(pessoa);
             }
 
-            _context.Fornecedors.Add(new Fornecedor
+            _context.Fornecedores.Add(new Fornecedor
             {
                 Pessoa = pessoa,
                 Ativo = Input.Ativo,
@@ -155,14 +141,12 @@ namespace s_tok.Pages.Fornecedors
 
             try
             {
-                // Pessoa e Fornecedor são persistidos juntos na mesma operação.
+                // Pessoa, seus dados complementares e Fornecedor são persistidos juntos.
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Não foi possível salvar o fornecedor. Verifique se o documento ou o vínculo já existe.");
+                ModelState.AddModelError(string.Empty, "Não foi possível salvar o fornecedor. Verifique se o documento ou o vínculo já existe.");
                 await CarregarPessoasAsync();
                 return Page();
             }
@@ -175,13 +159,9 @@ namespace s_tok.Pages.Fornecedors
         {
             PessoasDisponiveis = await _context.Pessoas
                 .AsNoTracking()
-                .Where(p => !_context.Fornecedors.Any(c => f.PessoaId == p.Id))
+                .Where(p => !_context.Fornecedores.Any(f => f.PessoaId == p.Id))
                 .OrderBy(p => p.Nome)
-                .Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Nome
-                })
+                .Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Nome })
                 .ToListAsync();
         }
 
