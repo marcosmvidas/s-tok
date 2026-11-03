@@ -32,7 +32,7 @@ namespace s_tok.Pages.Clientes
             var pessoaExistente = Input.PessoaId.HasValue;
             var nomeInformado = !string.IsNullOrWhiteSpace(Input.Nome);
 
-            if (pessoaExistente == nomeInformado)
+            if (!pessoaExistente && !nomeInformado)
                 ModelState.AddModelError("Input.PessoaId", "Selecione uma pessoa existente ou informe o nome de uma nova pessoa.");
 
             var documentoNumero = NormalizarDigitos(Input.DocumentoNumero);
