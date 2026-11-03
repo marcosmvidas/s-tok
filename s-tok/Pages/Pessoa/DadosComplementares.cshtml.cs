@@ -13,6 +13,8 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
     {
         if (!TryValidateModel(input))
             return ErrosValidacao();
+        if (!Enum.IsDefined(typeof(TipoDocumento), input.Tipo))
+            ModelState.AddModelError(nameof(input.Tipo), "Selecione um tipo de documento válido.");
 
         var numero = ApenasLetrasENumeros(input.Numero).ToUpperInvariant();
         if (input.Tipo == TipoDocumento.Cpf && numero.Length != 11)
@@ -43,6 +45,11 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
     public async Task<IActionResult> OnPostContatoAsync([FromForm] ContatoInput input)
     {
         if (!TryValidateModel(input))
+            return ErrosValidacao();
+        if (!Enum.IsDefined(typeof(TipoContato), input.Tipo))
+            ModelState.AddModelError(nameof(input.Tipo), "Selecione um tipo de contato válido.");
+
+        if (!ModelState.IsValid)
             return ErrosValidacao();
 
         input.Valor = input.Valor.Trim();
