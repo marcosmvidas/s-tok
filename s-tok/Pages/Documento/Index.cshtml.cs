@@ -17,7 +17,9 @@ public class IndexModel(S_tokDbContext context) : PageModel
             {
                 Id = d.Id,
                 Pessoa = d.Pessoa.Nome,
-                Tipo = d.Tipo == s_tok.Models.Enums.TipoDocumento.Cpf ? "CPF"\n                    : d.Tipo == s_tok.Models.Enums.TipoDocumento.Cnpj ? "CNPJ"\n                    : d.Tipo == s_tok.Models.Enums.TipoDocumento.Rg ? "RG" : "CNH",
+                Tipo = d.Tipo == s_tok.Models.Enums.TipoDocumento.Cpf ? "CPF"
+                    : d.Tipo == s_tok.Models.Enums.TipoDocumento.Cnpj ? "CNPJ"
+                    : d.Tipo == s_tok.Models.Enums.TipoDocumento.Rg ? "RG" : "CNH",
                 Numero = d.Numero
             })
             .ToListAsync();
