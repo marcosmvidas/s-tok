@@ -5,7 +5,7 @@ document.addEventListener("click", async (event) => {
     const content = button.closest(".modal-content");
     const modal = button.closest(".modal");
     const errorBox = content.querySelector("[data-modal-erro]");
-    const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const token = document.querySelector('main.page-content input[name="__RequestVerificationToken"]')?.value;
 
     errorBox.classList.add("d-none");
     errorBox.textContent = "";
