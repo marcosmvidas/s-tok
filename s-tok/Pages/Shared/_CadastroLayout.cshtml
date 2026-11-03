@@ -8,6 +8,7 @@
     var painelTitulo = ViewData["PainelTitulo"] as string ?? string.Empty;
     var painelSubtitulo = ViewData["PainelSubtitulo"] as string;
     var textoSalvar = ViewData["TextoSalvar"] as string ?? "Salvar";
+    var modoComplementar = ViewData["ModoComplementar"] as bool? ?? false;
 }
 
 <div class="page-heading">
@@ -33,22 +34,31 @@
     </header>
 
     <div class="p-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
+        @if (modoComplementar)
+        {
             @RenderBody()
-
-            <partial name="_BotoesFormulario"
-                     model="@(new s_tok.Pages.Shared.BotoesFormularioModel
-                     {
-                         TextoSalvar = textoSalvar,
-                         TextoCancelar = "Cancelar",
-                         PaginaCancelar = paginaVoltar
-                     })" />
-        </form>
+        }
+        else
+        {
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                @RenderBody()
+                <partial name="_BotoesFormulario"
+                         model="@(new s_tok.Pages.Shared.BotoesFormularioModel
+                         {
+                             TextoSalvar = textoSalvar,
+                             TextoCancelar = "Cancelar",
+                             PaginaCancelar = paginaVoltar
+                         })" />
+            </form>
+        }
     </div>
 </section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    @if (modoComplementar)
+    {
+        <script src="~/js/dados-complementares-pessoa.js" asp-append-version="true"></script>
+    }
 }
