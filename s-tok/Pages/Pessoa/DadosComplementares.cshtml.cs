@@ -122,6 +122,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         {
             await context.SaveChangesAsync();
             await transacao.CommitAsync();
+            TempData["Sucesso"] = "Endereço cadastrado com sucesso.";
             return new JsonResult(new { sucesso = true, mensagem = "Endereço cadastrado com sucesso." });
         }
         catch (DbUpdateException)
@@ -136,6 +137,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         try
         {
             await context.SaveChangesAsync();
+            TempData["Sucesso"] = mensagem;
             return new JsonResult(new { sucesso = true, mensagem });
         }
         catch (DbUpdateException)
