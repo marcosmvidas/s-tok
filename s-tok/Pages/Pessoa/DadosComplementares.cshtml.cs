@@ -16,7 +16,9 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         if (!Enum.IsDefined(typeof(TipoDocumento), input.Tipo))
             ModelState.AddModelError(nameof(input.Tipo), "Selecione um tipo de documento válido.");
 
-        var numero = ApenasLetrasENumeros(input.Numero).ToUpperInvariant();
+        var numero = input.Tipo is TipoDocumento.Cpf or TipoDocumento.Cnpj
+            ? new string((input.Numero ?? string.Empty).Where(char.IsDigit).ToArray())
+            : ApenasLetrasENumeros(input.Numero).ToUpperInvariant();
         if (input.Tipo == TipoDocumento.Cpf && numero.Length != 11)
             ModelState.AddModelError(nameof(input.Numero), "O CPF deve conter 11 dígitos.");
         if (input.Tipo == TipoDocumento.Cnpj && numero.Length != 14)
