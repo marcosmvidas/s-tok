@@ -15,8 +15,8 @@ namespace s_tok.Pages.Account
         }
 
         [BindProperty]
-        [Required(ErrorMessage = "Informe seu e-mail.")]
-        [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+        [Required(ErrorMessage = "Informe o usuário ou e-mail.")]
+        [Display(Name = "Usuário ou E-mail")]
         public string Email { get; set; } = string.Empty;
 
         [BindProperty]
@@ -41,8 +41,20 @@ namespace s_tok.Pages.Account
                 return Page();
             }
 
+            var identificador = Email.Trim();
+
+            var usuario = identificador.Contains('@')
+                ? await _signInManager.UserManager.FindByEmailAsync(identificador)
+                : await _signInManager.UserManager.FindByNameAsync(identificador);
+
+            if (usuario == null)
+            {
+                ModelState.AddModelError(string.Empty, "Usuário, e-mail ou senha inválidos.");
+                return Page();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(
-                Email,
+                usuario,
                 Password,
                 RememberMe,
                 lockoutOnFailure: true);
@@ -68,7 +80,7 @@ namespace s_tok.Pages.Account
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "E-mail ou senha inválidos.");
+                    "Usuário, e-mail ou senha inválidos.");
             }
 
             return Page();

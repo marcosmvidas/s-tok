@@ -22,5 +22,10 @@ namespace s_tok.Models
             get;
             set;
         } = null!;
+
+        public int? PessoaId { get; set; }
+
+        [ForeignKey(nameof(PessoaId))]
+        public virtual Pessoa? Pessoa { get; set; }
     }
 }

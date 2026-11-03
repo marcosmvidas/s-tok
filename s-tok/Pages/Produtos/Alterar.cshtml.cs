@@ -33,8 +33,6 @@ public class AlterarModel : PageModel
 
         Produto.Nome = Produto.Nome?.Trim() ?? string.Empty;
         Produto.Codigo = Produto.Codigo?.Trim() ?? string.Empty;
-        Produto.Categoria = string.IsNullOrWhiteSpace(Produto.Categoria) ? null : Produto.Categoria.Trim();
-        Produto.Fornecedor = string.IsNullOrWhiteSpace(Produto.Fornecedor) ? null : Produto.Fornecedor.Trim();
 
         if (!ModelState.IsValid)
             return Page();
@@ -61,7 +59,6 @@ public class AlterarModel : PageModel
         produtoExistente.Fornecedor = Produto.Fornecedor;
         produtoExistente.PrecoCusto = Produto.PrecoCusto;
         produtoExistente.PrecoVenda = Produto.PrecoVenda;
-        produtoExistente.QuantidadeEstoque = Produto.QuantidadeEstoque;
 
         await _context.SaveChangesAsync();
 

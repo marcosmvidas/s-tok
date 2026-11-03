@@ -1,0 +1,67 @@
+﻿@page
+@model s_tok.Pages.Fornecedores.RegistroModel
+
+@{
+    Layout = "_CadastroLayout";
+
+    ViewData["Title"] = "Novo fornecedor";
+    ViewData["Descricao"] = "Cadastre uma pessoa como fornecedora do sistema.";
+    ViewData["PaginaVoltar"] = "/Fornecedores/Index";
+    ViewData["TextoVoltar"] = "Voltar";
+    ViewData["PainelTitulo"] = "Dados do fornecedor";
+    ViewData["PainelSubtitulo"] = "Identificação e informações comerciais";
+    ViewData["TextoSalvar"] = "Salvar fornecedor";
+}
+
+<div class="row g-3">
+
+    <div class="col-md-8">
+        <label asp-for="Input.PessoaId" class="form-label">
+            Pessoa já cadastrada
+        </label>
+
+        <select asp-for="Input.PessoaId"
+                asp-items="Model.PessoasDisponiveis"
+                class="form-select">
+            <option value="">Selecione uma pessoa</option>
+        </select>
+
+        <span asp-validation-for="Input.PessoaId"
+              class="text-danger"></span>
+    </div>
+
+    <div class="col-md-8">
+        <label asp-for="Input.Nome" class="form-label">
+            Nome da nova pessoa
+        </label>
+
+        <input asp-for="Input.Nome"
+               class="form-control"
+               placeholder="Nome completo ou razão social" />
+
+        <span asp-validation-for="Input.Nome"
+              class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label d-block">Situação</label>
+
+        <div class="form-check form-switch">
+            <input asp-for="Input.Ativo" class="form-check-input" />
+            <label asp-for="Input.Ativo" class="form-check-label">
+                Fornecedor ativo
+            </label>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Input.Observacao" class="form-label">
+            Observações
+        </label>
+
+        <textarea asp-for="Input.Observacao"
+                  class="form-control"
+                  rows="4"></textarea>
+    </div>
+
+</div>

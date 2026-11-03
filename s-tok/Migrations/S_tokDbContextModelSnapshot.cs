@@ -213,23 +213,551 @@ namespace s_tok.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("s_tok.Models.Produto", b =>
+            modelBuilder.Entity("s_tok.Models.CaixaSessao", b =>
                 {
-                    b.Property<string>("Categoria")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("AbertoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EquipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("FechadoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("ValorAbertura")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ValorFechamento")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipeId");
+
+                    b.HasIndex("LojaId");
+
+                    b.ToTable("CaixaSessoes");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
+
+                    b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Compra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DataCompra")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FornecedorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NumeroNota")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FornecedorId");
+
+                    b.HasIndex("LojaId");
+
+                    b.ToTable("Compras");
+                });
+
+            modelBuilder.Entity("s_tok.Models.CompraItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("CustoUnitario")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("CompraItens");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Contato", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Valor")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("Contatos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Documento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Numero")
+                        .IsUnique();
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
+
+                    b.ToTable("Documentos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Endereco", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Cep")
+                        .HasMaxLength(9)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Cidade")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Complemento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Logradouro")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Numero")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Principal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Uf")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("Enderecos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Equipe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
+
+                    b.ToTable("Equipe", (string)null);
+                });
+
+            modelBuilder.Entity("s_tok.Models.Estoque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("ProdutoId", "LojaId")
+                        .IsUnique();
+
+                    b.ToTable("Estoques");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Fornecedor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
+
+                    b.ToTable("Fornecedores");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Lancamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Forma")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("PagoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PessoaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlanoContaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Valor")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ValorPago")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("Vencimento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("VendaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("PessoaId");
+
+                    b.HasIndex("PlanoContaId");
+
+                    b.HasIndex("VendaId");
+
+                    b.HasIndex("Status", "Vencimento");
+
+                    b.ToTable("Lancamentos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Loja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("Lojas");
+                });
+
+            modelBuilder.Entity("s_tok.Models.MovimentacaoEstoque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("CustoUnitario")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EquipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("VendaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("EquipeId");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("VendaId");
+
+                    b.HasIndex("ProdutoId", "LojaId", "DataHora");
+
+                    b.ToTable("MovimentacoesEstoque");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Pessoa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pessoas");
+                });
+
+            modelBuilder.Entity("s_tok.Models.PlanoConta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AceitaLancamento")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PaiId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
+                    b.HasIndex("PaiId");
+
+                    b.ToTable("PlanoContas");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Produto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoriaId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Codigo")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Fornecedor")
-                        .HasMaxLength(150)
+                    b.Property<decimal>("EstoqueMinimo")
+                        .HasPrecision(18, 3)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("FornecedorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
@@ -238,23 +766,71 @@ namespace s_tok.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("PrecoCusto")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("PrecoVenda")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("QuantidadeEstoque")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UnidadeBase")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("Codigo")
                         .IsUnique();
 
+                    b.HasIndex("FornecedorId");
+
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("s_tok.Models.Usuario", b => {
+            modelBuilder.Entity("s_tok.Models.ProdutoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CodigoBarras")
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("FatorConversao")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PrecoVenda")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodigoBarras")
+                        .IsUnique();
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("ProdutoItens");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Usuario", b =>
+                {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
@@ -268,11 +844,138 @@ namespace s_tok.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PessoaId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityUserId");
+                    b.HasIndex("IdentityUserId")
+                        .IsUnique();
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Venda", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CaixaSessaoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ClienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Desconto")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EquipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Numero")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaixaSessaoId");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("DataHora");
+
+                    b.HasIndex("EquipeId");
+
+                    b.HasIndex("LojaId", "Numero")
+                        .IsUnique();
+
+                    b.ToTable("Vendas");
+                });
+
+            modelBuilder.Entity("s_tok.Models.VendaItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Desconto")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ProdutoItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantidade")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VendaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.HasIndex("ProdutoItemId");
+
+                    b.HasIndex("VendaId");
+
+                    b.ToTable("VendaItens");
+                });
+
+            modelBuilder.Entity("s_tok.Models.VendaPagamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Forma")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Valor")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VendaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VendaId");
+
+                    b.ToTable("VendaPagamentos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -326,15 +1029,382 @@ namespace s_tok.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("s_tok.Models.CaixaSessao", b =>
+                {
+                    b.HasOne("s_tok.Models.Equipe", "Equipe")
+                        .WithMany()
+                        .HasForeignKey("EquipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Equipe");
+
+                    b.Navigation("Loja");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Cliente", b =>
+                {
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithOne("Cliente")
+                        .HasForeignKey("s_tok.Models.Cliente", "PessoaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Compra", b =>
+                {
+                    b.HasOne("s_tok.Models.Fornecedor", "Fornecedor")
+                        .WithMany()
+                        .HasForeignKey("FornecedorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Fornecedor");
+
+                    b.Navigation("Loja");
+                });
+
+            modelBuilder.Entity("s_tok.Models.CompraItem", b =>
+                {
+                    b.HasOne("s_tok.Models.Compra", "Compra")
+                        .WithMany("Itens")
+                        .HasForeignKey("CompraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Contato", b =>
+                {
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithMany("Contatos")
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Documento", b =>
+                {
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithOne("Documento")
+                        .HasForeignKey("s_tok.Models.Documento", "PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Endereco", b =>
+                {
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithMany("Enderecos")
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Equipe", b =>
+                {
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId");
+
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithOne("Equipe")
+                        .HasForeignKey("s_tok.Models.Equipe", "PessoaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Loja");
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Estoque", b =>
+                {
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Loja");
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Fornecedor", b =>
+                {
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithOne("Fornecedor")
+                        .HasForeignKey("s_tok.Models.Fornecedor", "PessoaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Lancamento", b =>
+                {
+                    b.HasOne("s_tok.Models.Compra", "Compra")
+                        .WithMany()
+                        .HasForeignKey("CompraId");
+
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId");
+
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId");
+
+                    b.HasOne("s_tok.Models.PlanoConta", "PlanoConta")
+                        .WithMany()
+                        .HasForeignKey("PlanoContaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Venda", "Venda")
+                        .WithMany()
+                        .HasForeignKey("VendaId");
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("Loja");
+
+                    b.Navigation("Pessoa");
+
+                    b.Navigation("PlanoConta");
+
+                    b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("s_tok.Models.MovimentacaoEstoque", b =>
+                {
+                    b.HasOne("s_tok.Models.Compra", "Compra")
+                        .WithMany()
+                        .HasForeignKey("CompraId");
+
+                    b.HasOne("s_tok.Models.Equipe", "Equipe")
+                        .WithMany()
+                        .HasForeignKey("EquipeId");
+
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Venda", "Venda")
+                        .WithMany()
+                        .HasForeignKey("VendaId");
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("Equipe");
+
+                    b.Navigation("Loja");
+
+                    b.Navigation("Produto");
+
+                    b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("s_tok.Models.PlanoConta", b =>
+                {
+                    b.HasOne("s_tok.Models.PlanoConta", "Pai")
+                        .WithMany("Filhos")
+                        .HasForeignKey("PaiId");
+
+                    b.Navigation("Pai");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Produto", b =>
+                {
+                    b.HasOne("s_tok.Models.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId");
+
+                    b.HasOne("s_tok.Models.Fornecedor", "Fornecedor")
+                        .WithMany()
+                        .HasForeignKey("FornecedorId");
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Fornecedor");
+                });
+
+            modelBuilder.Entity("s_tok.Models.ProdutoItem", b =>
+                {
+                    b.HasOne("s_tok.Models.Produto", "Produto")
+                        .WithMany("Itens")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+                });
+
             modelBuilder.Entity("s_tok.Models.Usuario", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Pessoa", "Pessoa")
+                        .WithOne("Usuario")
+                        .HasForeignKey("s_tok.Models.Usuario", "PessoaId");
+
+                    b.Navigation("IdentityUser");
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Venda", b =>
+                {
+                    b.HasOne("s_tok.Models.CaixaSessao", "CaixaSessao")
+                        .WithMany()
+                        .HasForeignKey("CaixaSessaoId");
+
+                    b.HasOne("s_tok.Models.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId");
+
+                    b.HasOne("s_tok.Models.Equipe", "Equipe")
+                        .WithMany()
+                        .HasForeignKey("EquipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CaixaSessao");
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Equipe");
+
+                    b.Navigation("Loja");
+                });
+
+            modelBuilder.Entity("s_tok.Models.VendaItem", b =>
+                {
+                    b.HasOne("s_tok.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("s_tok.Models.ProdutoItem", "ProdutoItem")
+                        .WithMany()
+                        .HasForeignKey("ProdutoItemId");
+
+                    b.HasOne("s_tok.Models.Venda", "Venda")
+                        .WithMany("Itens")
+                        .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdentityUser");
+                    b.Navigation("Produto");
+
+                    b.Navigation("ProdutoItem");
+
+                    b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("s_tok.Models.VendaPagamento", b =>
+                {
+                    b.HasOne("s_tok.Models.Venda", "Venda")
+                        .WithMany("Pagamentos")
+                        .HasForeignKey("VendaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Compra", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Pessoa", b =>
+                {
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Contatos");
+
+                    b.Navigation("Documento");
+
+                    b.Navigation("Enderecos");
+
+                    b.Navigation("Equipe");
+
+                    b.Navigation("Fornecedor");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("s_tok.Models.PlanoConta", b =>
+                {
+                    b.Navigation("Filhos");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Produto", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("s_tok.Models.Venda", b =>
+                {
+                    b.Navigation("Itens");
+
+                    b.Navigation("Pagamentos");
                 });
 #pragma warning restore 612, 618
         }

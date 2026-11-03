@@ -29,8 +29,6 @@
             <dd class="col-sm-8 mb-3">@Model.Username</dd>
             <dt class="col-sm-4 mb-2">Perfil de acesso</dt>
             <dd class="col-sm-8 mb-3">@Model.Perfil</dd>
-            <dt class="col-sm-4 mb-2">E-mail confirmado</dt>
-            <dd class="col-sm-8 mb-3">@(Model.EmailConfirmado ? "Confirmado" : "Pendente")</dd>
         </dl>
         <div class="d-flex justify-content-end mt-4">
             <a asp-page="/Equipe/Alterar" asp-route-id="@Model.Id" class="btn btn-primary">Alterar usuário</a>

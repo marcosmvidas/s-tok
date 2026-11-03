@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using s_tok.Data;
 using s_tok.Models;
 using s_tok.Services;
 
@@ -41,18 +42,32 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Serviço de configuração inicial
 builder.Services.AddScoped<InitialSetupService>();
 
+builder.Services.AddHttpClient<ICepService, CepService>(client =>
+{
+    client.BaseAddress = new Uri("https://viacep.com.br/");
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+
 // Razor Pages: proteger o sistema por padrão
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/");
 
     options.Conventions.AllowAnonymousToPage("/Account/Login");
+    options.Conventions.AllowAnonymousToPage("/Account/AccessDenied");
     options.Conventions.AllowAnonymousToPage("/Error");
     options.Conventions.AllowAnonymousToPage("/Privacy");
 });
 
 var app = builder.Build();
 
+await DbSeeder.SeedAsync(app.Services, app.Configuration);
+Console.WriteLine(
+    $"Banco conectado: {app.Services
+        .CreateScope()
+        .ServiceProvider
+        .GetRequiredService<S_tokDbContext>()
+        .Database.GetDbConnection().DataSource}");
 
 if (args.Contains("--setup-superadmin", StringComparer.OrdinalIgnoreCase))
 {
@@ -131,6 +146,7 @@ if (args.Contains("--setup-superadmin", StringComparer.OrdinalIgnoreCase))
     Console.WriteLine("SuperAdmin criado com sucesso!");
     return;
 }
+
 // Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {

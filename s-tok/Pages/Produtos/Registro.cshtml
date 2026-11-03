@@ -1,75 +1,74 @@
 @page
 @model s_tok.Pages.Produtos.RegistroModel
+
 @{
+    Layout = "_LayoutCadastro";
     ViewData["Title"] = "Novo produto";
+    ViewData["Descricao"] = "Preencha os dados para adicionar um produto ao catálogo.";
+    ViewData["PaginaVoltar"] = "/Produtos/Index";
+    ViewData["TextoVoltar"] = "Voltar para produtos";
+    ViewData["PainelTitulo"] = "Dados do produto";
+    ViewData["PainelSubtitulo"] = "Os campos com validação devem ser preenchidos corretamente.";
+    ViewData["TextoSalvar"] = "Cadastrar produto";
 }
 
-<partial name="_CabecalhoPagina"
-         model="@(new s_tok.Pages.Shared.CabecalhoPaginaModel {
-             Titulo = "Novo produto",
-             Descricao = "Preencha os dados para adicionar um produto ao catálogo."
-         })" />
-
-<section class="content-panel">
-    <header class="panel-header">
-        <div>
-            <h2 class="panel-title">Dados do produto</h2>
-            <div class="panel-subtitle">Os campos com validação devem ser preenchidos corretamente.</div>
-        </div>
-    </header>
-
-    <div class="p-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-            <div class="row g-3">
-                <div class="col-12 col-md-8">
-                    <label asp-for="Produto.Nome" class="form-label"></label>
-                    <input asp-for="Produto.Nome" class="form-control" maxlength="120" />
-                    <span asp-validation-for="Produto.Nome" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="Produto.Codigo" class="form-label"></label>
-                    <input asp-for="Produto.Codigo" class="form-control" maxlength="40" />
-                    <span asp-validation-for="Produto.Codigo" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label asp-for="Produto.Categoria" class="form-label"></label>
-                    <input asp-for="Produto.Categoria" class="form-control" maxlength="80" placeholder="Ex.: Acessórios" />
-                    <span asp-validation-for="Produto.Categoria" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label asp-for="Produto.Fornecedor" class="form-label"></label>
-                    <input asp-for="Produto.Fornecedor" class="form-control" maxlength="150" placeholder="Nome do fornecedor (opcional)" />
-                    <span asp-validation-for="Produto.Fornecedor" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="Produto.PrecoCusto" class="form-label"></label>
-                    <input asp-for="Produto.PrecoCusto" class="form-control" type="number" min="0" step="0.01" />
-                    <span asp-validation-for="Produto.PrecoCusto" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="Produto.PrecoVenda" class="form-label"></label>
-                    <input asp-for="Produto.PrecoVenda" class="form-control" type="number" min="0" step="0.01" />
-                    <span asp-validation-for="Produto.PrecoVenda" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="Produto.QuantidadeEstoque" class="form-label"></label>
-                    <input asp-for="Produto.QuantidadeEstoque" class="form-control" type="number" min="0" step="1" />
-                    <span asp-validation-for="Produto.QuantidadeEstoque" class="text-danger small"></span>
-                </div>
-            </div>
-
-            <partial name="_BotoesFormulario"
-                     model="@(new s_tok.Pages.Shared.BotoesFormularioModel {
-                         TextoSalvar = "Cadastrar produto",
-                         TextoCancelar = "Cancelar",
-                         PaginaCancelar = "/Produtos/Index"
-                     })" />
-        </form>
+<div class="row g-3">
+    <div class="col-12 col-md-4">
+        <label asp-for="Produto.Codigo" class="form-label">Código</label>
+        <input asp-for="Produto.Codigo" class="form-control" maxlength="40" />
+        <span asp-validation-for="Produto.Codigo" class="text-danger small"></span>
     </div>
-</section>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    <div class="col-12 col-md-8">
+        <label asp-for="Produto.Nome" class="form-label">Nome</label>
+        <input asp-for="Produto.Nome" class="form-control" maxlength="120" />
+        <span asp-validation-for="Produto.Nome" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6">
+        <label asp-for="Produto.CategoriaId" class="form-label">Categoria</label>
+        <select asp-for="Produto.CategoriaId" asp-items="Model.Categorias" class="form-select">
+            <option value="">Selecione</option>
+        </select>
+        <span asp-validation-for="Produto.CategoriaId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6">
+        <label asp-for="Produto.FornecedorId" class="form-label">Fornecedor</label>
+        <select asp-for="Produto.FornecedorId" asp-items="Model.Fornecedores" class="form-select">
+            <option value="">Selecione</option>
+        </select>
+        <span asp-validation-for="Produto.FornecedorId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <label asp-for="Produto.UnidadeBase" class="form-label">Unidade</label>
+        <input asp-for="Produto.UnidadeBase" class="form-control" maxlength="10" />
+        <span asp-validation-for="Produto.UnidadeBase" class="text-danger small"></span>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <label asp-for="Produto.PrecoCusto" class="form-label">Preço de custo</label>
+        <input asp-for="Produto.PrecoCusto" class="form-control" inputmode="decimal" />
+        <span asp-validation-for="Produto.PrecoCusto" class="text-danger small"></span>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <label asp-for="Produto.PrecoVenda" class="form-label">Preço de venda</label>
+        <input asp-for="Produto.PrecoVenda" class="form-control" inputmode="decimal" />
+        <span asp-validation-for="Produto.PrecoVenda" class="text-danger small"></span>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <label asp-for="Produto.EstoqueMinimo" class="form-label">Estoque mínimo</label>
+        <input asp-for="Produto.EstoqueMinimo" class="form-control" inputmode="decimal" />
+        <span asp-validation-for="Produto.EstoqueMinimo" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <div class="form-check">
+            <input asp-for="Produto.Ativo" class="form-check-input" />
+            <label asp-for="Produto.Ativo" class="form-check-label">Produto ativo</label>
+        </div>
+    </div>
+</div>

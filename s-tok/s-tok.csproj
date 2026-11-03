@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>s_tok</RootNamespace>
+    <UserSecretsId>8c7884a0-190c-448e-8a35-375636150270</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Pages\Contato\" />
+    <Folder Include="Pages\Endereco\" />
   </ItemGroup>
 
 </Project>
