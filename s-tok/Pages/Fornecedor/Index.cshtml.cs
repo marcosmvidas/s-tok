@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvf.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
 
-namespace s_tok.Pages.Fornecedors
+namespace s_tok.Pages.Fornecedores
 {
     public class IndexModel : PageModel
     {
@@ -13,11 +13,11 @@ namespace s_tok.Pages.Fornecedors
             _context = context;
         }
 
-        public List<FornecedorListagemItem> Fornecedors { get; private set; } = [];
+        public List<FornecedorListagemItem> Fornecedores { get; private set; } = [];
 
         public async Task OnGetAsync()
         {
-            var fornecedores = await _context.Fornecedors
+            var fornecedores = await _context.Fornecedores
                 .AsNoTracking()
                 .Include(f => f.Pessoa)
                     .ThenInclude(p => p.Documento)
@@ -26,7 +26,7 @@ namespace s_tok.Pages.Fornecedors
                 .OrderBy(f => f.Pessoa.Nome)
                 .ToListAsync();
 
-            Fornecedors = fornecedores.Select(f => new FornecedorListagemItem
+            Fornecedores = fornecedores.Select(f => new FornecedorListagemItem
             {
                 Id = f.Id,
                 Nome = f.Pessoa.Nome,
