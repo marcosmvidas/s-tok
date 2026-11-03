@@ -1,0 +1,24 @@
+@page
+@model s_tok.Pages.Endereco.IndexModel
+@{
+    ViewData["Title"] = "Endereços";
+}
+<partial name="_IndexCadastro"
+         model="@(new s_tok.Pages.Shared.GridListagemModel {
+             Titulo = "Endereços",
+             Descricao = "Consulte os endereços vinculados às pessoas cadastradas.",
+             MensagemVazia = "Nenhum endereço cadastrado.",
+             PaginaNovo = "/Endereco/Registro",
+             TextoBotaoNovo = "Novo endereço",
+             PropriedadeId = "Id",
+             PropriedadeNome = "Pessoa",
+             Colunas = new List<s_tok.Pages.Shared.GridColunaModel> {
+                 new() { Titulo = "PESSOA", Propriedade = "Pessoa", ClasseCss = "product-name" },
+                 new() { Titulo = "LOGRADOURO", Propriedade = "Logradouro" },
+                 new() { Titulo = "BAIRRO", Propriedade = "Bairro" },
+                 new() { Titulo = "CIDADE / UF", Propriedade = "CidadeUf" },
+                 new() { Titulo = "CEP", Propriedade = "Cep" },
+                 new() { Titulo = "PRINCIPAL", Propriedade = "Principal" }
+             },
+             Itens = Model.Enderecos.Cast<object>().ToList()
+         })" />
