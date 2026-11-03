@@ -118,7 +118,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         catch (DbUpdateException)
         {
             await transacao.RollbackAsync();
-            return StatusCode(500, new { sucesso = false, mensagem = "Não foi possível salvar o endereço. Confira os dados e tente novamente." });
+            return new ObjectResult(new { sucesso = false, mensagem = "Não foi possível salvar o endereço. Confira os dados e tente novamente." }) { StatusCode = 500 };
         }
     }
 
@@ -131,7 +131,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         }
         catch (DbUpdateException)
         {
-            return StatusCode(500, new { sucesso = false, mensagem = "Não foi possível salvar. Verifique se o dado já está cadastrado." });
+            return new ObjectResult(new { sucesso = false, mensagem = "Não foi possível salvar. Verifique se o dado já está cadastrado." }) { StatusCode = 500 };
         }
     }
 
