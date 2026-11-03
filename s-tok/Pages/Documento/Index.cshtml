@@ -1,0 +1,21 @@
+@page
+@model s_tok.Pages.Documento.IndexModel
+@{
+    ViewData["Title"] = "Documentos";
+}
+<partial name="_IndexCadastro"
+         model="@(new s_tok.Pages.Shared.GridListagemModel {
+             Titulo = "Documentos",
+             Descricao = "Consulte os documentos de identificação vinculados às pessoas.",
+             MensagemVazia = "Nenhum documento cadastrado.",
+             PaginaNovo = "/Documento/Registro",
+             TextoBotaoNovo = "Novo documento",
+             PropriedadeId = "Id",
+             PropriedadeNome = "Pessoa",
+             Colunas = new List<s_tok.Pages.Shared.GridColunaModel> {
+                 new() { Titulo = "PESSOA", Propriedade = "Pessoa", ClasseCss = "product-name" },
+                 new() { Titulo = "TIPO", Propriedade = "Tipo" },
+                 new() { Titulo = "NÚMERO", Propriedade = "Numero" }
+             },
+             Itens = Model.Documentos.Cast<object>().ToList()
+         })" />
