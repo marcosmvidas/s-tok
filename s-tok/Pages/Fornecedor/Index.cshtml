@@ -1,0 +1,24 @@
+@page
+@model s_tok.Pages.Fornecedores.IndexModel
+
+@{
+    ViewData["Title"] = "Fornecedores";
+}
+
+<partial name="_IndexCadastro"
+         model="@(new s_tok.Pages.Shared.GridListagemModel {
+             Titulo = "Fornecedores",
+             Descricao = "Consulte as pessoas cadastradas como fornecedores.",
+             MensagemVazia = "Nenhum fornecedor cadastrado.",
+             PaginaNovo = "/Fornecedor/Registro",
+             TextoBotaoNovo = "Novo fornecedor",
+             PropriedadeId = "Id",
+             PropriedadeNome = "Nome",
+             Colunas = new List<s_tok.Pages.Shared.GridColunaModel> {
+                 new() { Titulo = "NOME", Propriedade = "Nome", ClasseCss = "product-name" },
+                 new() { Titulo = "DOCUMENTO", Propriedade = "Documento" },
+                 new() { Titulo = "CONTATO", Propriedade = "Contato" },
+                 new() { Titulo = "ATIVO", Propriedade = "Ativo" }
+             },
+             Itens = Model.Fornecedores.Cast<object>().ToList()
+         })" />
