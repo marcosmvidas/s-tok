@@ -1,0 +1,22 @@
+@page
+@model s_tok.Pages.Contato.IndexModel
+@{
+    ViewData["Title"] = "Contatos";
+}
+<partial name="_IndexCadastro"
+         model="@(new s_tok.Pages.Shared.GridListagemModel {
+             Titulo = "Contatos",
+             Descricao = "Gerencie telefones, WhatsApp, e-mails e outros contatos das pessoas.",
+             MensagemVazia = "Nenhum contato cadastrado.",
+             PaginaNovo = "/Contato/Registro",
+             TextoBotaoNovo = "Novo contato",
+             PropriedadeId = "Id",
+             PropriedadeNome = "Pessoa",
+             Colunas = new List<s_tok.Pages.Shared.GridColunaModel> {
+                 new() { Titulo = "PESSOA", Propriedade = "Pessoa", ClasseCss = "product-name" },
+                 new() { Titulo = "TIPO", Propriedade = "Tipo" },
+                 new() { Titulo = "CONTATO", Propriedade = "Valor" },
+                 new() { Titulo = "OBSERVAÇÃO", Propriedade = "Observacao" }
+             },
+             Itens = Model.Contatos.Cast<object>().ToList()
+         })" />

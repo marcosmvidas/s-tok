@@ -1,0 +1,35 @@
+@page
+@model s_tok.Pages.Contato.RegistroModel
+@using s_tok.Models.Enums
+@{
+    Layout = "_CadastroLayout";
+    ViewData["Title"] = "Novo contato";
+    ViewData["Descricao"] = "Cadastre uma forma de contato para uma pessoa.";
+    ViewData["PaginaVoltar"] = "/Contato/Index";
+    ViewData["PainelTitulo"] = "Dados do contato";
+    ViewData["PainelSubtitulo"] = "Informe o tipo e o valor do contato";
+    ViewData["TextoSalvar"] = "Salvar contato";
+}
+<div class="row g-3">
+    <div class="col-12">
+        <label asp-for="Input.PessoaId" class="form-label"></label>
+        <select asp-for="Input.PessoaId" asp-items="Model.Pessoas" class="form-select">
+            <option value="0">Selecione uma pessoa</option>
+        </select>
+        <span asp-validation-for="Input.PessoaId" class="text-danger small"></span>
+    </div>
+    <div class="col-12 col-md-4">
+        <label asp-for="Input.Tipo" class="form-label"></label>
+        <select asp-for="Input.Tipo" asp-items="Html.GetEnumSelectList<TipoContato>()" class="form-select"></select>
+    </div>
+    <div class="col-12 col-md-8">
+        <label asp-for="Input.Valor" class="form-label"></label>
+        <input asp-for="Input.Valor" class="form-control" placeholder="Telefone, WhatsApp ou e-mail" />
+        <span asp-validation-for="Input.Valor" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Input.Observacao" class="form-label"></label>
+        <textarea asp-for="Input.Observacao" class="form-control" rows="3" placeholder="Ex.: contato comercial, recados..."></textarea>
+        <span asp-validation-for="Input.Observacao" class="text-danger small"></span>
+    </div>
+</div>

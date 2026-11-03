@@ -1,0 +1,33 @@
+@page
+@model s_tok.Pages.Documento.RegistroModel
+@using s_tok.Models.Enums
+@{
+    Layout = "_CadastroLayout";
+    ViewData["Title"] = "Novo documento";
+    ViewData["Descricao"] = "Vincule um documento de identificação a uma pessoa.";
+    ViewData["PaginaVoltar"] = "/Documento/Index";
+    ViewData["PainelTitulo"] = "Dados do documento";
+    ViewData["PainelSubtitulo"] = "Cada pessoa pode possuir um documento principal cadastrado";
+    ViewData["TextoSalvar"] = "Salvar documento";
+}
+<div class="row g-3">
+    <div class="col-12">
+        <label asp-for="Input.PessoaId" class="form-label"></label>
+        <select asp-for="Input.PessoaId" asp-items="Model.Pessoas" class="form-select">
+            <option value="0">Selecione uma pessoa</option>
+        </select>
+        <span asp-validation-for="Input.PessoaId" class="text-danger small"></span>
+    </div>
+    <div class="col-12 col-md-4">
+        <label asp-for="Input.Tipo" class="form-label"></label>
+        <select asp-for="Input.Tipo" asp-items="Html.GetEnumSelectList<TipoDocumento>()" class="form-select"></select>
+    </div>
+    <div class="col-12 col-md-8">
+        <label asp-for="Input.Numero" class="form-label"></label>
+        <input asp-for="Input.Numero" class="form-control" inputmode="numeric" autocomplete="off" />
+        <span asp-validation-for="Input.Numero" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <div class="form-text">CPF e CNPJ são armazenados somente com letras e números, sem pontuação.</div>
+    </div>
+</div>
