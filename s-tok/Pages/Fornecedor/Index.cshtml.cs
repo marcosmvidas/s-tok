@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
 
-namespace s_tok.Pages.Fornecedores
+namespace s_tok.Pages.Fornecedor
 {
     public class IndexModel : PageModel
     {
