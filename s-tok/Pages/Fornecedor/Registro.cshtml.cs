@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
 using s_tok.Models.Enums;
 
-namespace s_tok.Pages.Fornecedores
+namespace s_tok.Pages.Fornecedor
 {
     public class RegistroModel : PageModel
     {
@@ -132,7 +132,7 @@ namespace s_tok.Pages.Fornecedores
                 _context.Pessoas.Add(pessoa);
             }
 
-            _context.Fornecedores.Add(new Fornecedor
+            _context.Fornecedores.Add(new s_tok.Models.Fornecedor
             {
                 Pessoa = pessoa,
                 Ativo = Input.Ativo,
