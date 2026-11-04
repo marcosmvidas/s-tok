@@ -1,0 +1,40 @@
+@model s_tok.Pages.Shared.ResumoDetalhesModel
+
+<div class="page-heading">
+    <div>
+        <h1>@Model.Titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Descricao))
+        {
+            <p>@Model.Descricao</p>
+        }
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        @if (!string.IsNullOrWhiteSpace(Model.PaginaVoltar))
+        {
+            <a asp-page="@Model.PaginaVoltar"
+               class="btn btn-outline-secondary">
+                Voltar
+            </a>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.PaginaAlterar))
+        {
+            <a asp-page="@Model.PaginaAlterar"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Alterar
+            </a>
+        }
+    </div>
+</div>
+
+<section class="content-panel">
+    <div class="p-3">
+        <dl class="row mb-0">
+            @foreach (var campo in Model.Campos)
+            {
+                <dt class="col-sm-4 col-lg-3">@campo.Rotulo</dt>
+                <dd class="col-sm-8 col-lg-9">@(!string.IsNullOrWhiteSpace(campo.Valor) ? campo.Valor : "—")</dd>
+            }
+        </dl>
+    </div>
+</section>
