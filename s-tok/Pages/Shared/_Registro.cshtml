@@ -1,0 +1,64 @@
+@{
+    Layout = "_Layout";
+
+    var titulo = ViewData["Title"] as string ?? string.Empty;
+    var descricao = ViewData["Descricao"] as string;
+    var paginaVoltar = ViewData["PaginaVoltar"] as string ?? "/Index";
+    var textoVoltar = ViewData["TextoVoltar"] as string ?? "Voltar";
+    var painelTitulo = ViewData["PainelTitulo"] as string ?? string.Empty;
+    var painelSubtitulo = ViewData["PainelSubtitulo"] as string;
+    var textoSalvar = ViewData["TextoSalvar"] as string ?? "Salvar";
+    var modoComplementar = ViewData["ModoComplementar"] as bool? ?? false;
+}
+
+<div class="page-heading">
+    <div>
+        <h1>@titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(descricao))
+        {
+            <p>@descricao</p>
+        }
+    </div>
+    <a asp-page="@paginaVoltar" class="btn btn-outline-secondary">@textoVoltar</a>
+</div>
+
+<section class="content-panel">
+    <header class="panel-header">
+        <div>
+            <h2 class="panel-title">@painelTitulo</h2>
+            @if (!string.IsNullOrWhiteSpace(painelSubtitulo))
+            {
+                <div class="panel-subtitle">@painelSubtitulo</div>
+            }
+        </div>
+    </header>
+
+    <div class="p-4">
+        @if (modoComplementar)
+        {
+            @RenderBody()
+        }
+        else
+        {
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                @RenderBody()
+                <partial name="_BotoesFormulario"
+                         model="@(new s_tok.Pages.Shared.BotoesFormularioModel
+                         {
+                             TextoSalvar = textoSalvar,
+                             TextoCancelar = "Cancelar",
+                             PaginaCancelar = paginaVoltar
+                         })" />
+            </form>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (modoComplementar)
+    {
+        <script src="~/js/dados-complementares-pessoa.js" asp-append-version="true"></script>
+    }
+}
