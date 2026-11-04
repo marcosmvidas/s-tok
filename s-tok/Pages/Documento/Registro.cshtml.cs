@@ -48,7 +48,7 @@ public class RegistroModel(S_tokDbContext context) : PageModel
             return Page();
         }
 
-        context.Documentos.Add(new Documento
+        context.Documentos.Add(new s_tok.Models.Documento
         {
             PessoaId = Input.PessoaId,
             Tipo = Input.Tipo,

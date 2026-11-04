@@ -94,20 +94,20 @@ public class RegistroModel(
                 return Page();
             }
 
-            var pessoa = new Pessoa
+            var pessoa = new s_tok.Models.Pessoa
             {
                 Nome = Entrada.NomeCompleto.Trim(),
                 CriadoEm = DateTime.UtcNow
             };
 
             context.Pessoas.Add(pessoa);
-            context.Usuarios.Add(new Usuario
+            context.Usuarios.Add(new s_tok.Models.Usuario
             {
                 NomeCompleto = Entrada.NomeCompleto.Trim(),
                 IdentityUserId = usuarioIdentity.Id,
                 Pessoa = pessoa
             });
-            context.Equipe.Add(new Equipe
+            context.Equipe.Add(new s_tok.Models.Equipe
             {
                 Pessoa = pessoa,
                 Ativo = true

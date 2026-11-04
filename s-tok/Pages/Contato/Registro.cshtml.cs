@@ -40,7 +40,7 @@ public class RegistroModel(S_tokDbContext context) : PageModel
             return Page();
         }
 
-        context.Contatos.Add(new Contato
+        context.Contatos.Add(new s_tok.Models.Contato
         {
             PessoaId = Input.PessoaId,
             Tipo = Input.Tipo,

@@ -34,7 +34,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         if (!ModelState.IsValid)
             return ErrosValidacao();
 
-        context.Documentos.Add(new Documento
+        context.Documentos.Add(new s_tok.Models.Documento
         {
             PessoaId = input.PessoaId,
             Tipo = input.Tipo,
@@ -67,7 +67,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
         if (!ModelState.IsValid)
             return ErrosValidacao();
 
-        context.Contatos.Add(new Contato
+        context.Contatos.Add(new s_tok.Models.Contato
         {
             PessoaId = input.PessoaId,
             Tipo = input.Tipo,
@@ -105,7 +105,7 @@ public class DadosComplementaresModel(S_tokDbContext context) : PageModel
             anteriores.ForEach(e => e.Principal = false);
         }
 
-        context.Enderecos.Add(new Endereco
+        context.Enderecos.Add(new s_tok.Models.Endereco
         {
             PessoaId = input.PessoaId,
             Logradouro = input.Logradouro,

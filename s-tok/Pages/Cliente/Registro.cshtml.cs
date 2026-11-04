@@ -48,7 +48,7 @@ public class RegistroModel(S_tokDbContext context) : PageModel
             return Page();
         }
 
-        Pessoa pessoa;
+        s_tok.Models.Pessoa pessoa;
         if (pessoaExistente)
         {
             pessoa = await context.Pessoas.FirstOrDefaultAsync(p => p.Id == Input.PessoaId!.Value)
@@ -70,7 +70,7 @@ public class RegistroModel(S_tokDbContext context) : PageModel
         }
         else
         {
-            pessoa = new Pessoa
+            pessoa = new s_tok.Models.Pessoa
             {
                 Nome = Input.Nome!.Trim(),
                 CriadoEm = DateTime.UtcNow

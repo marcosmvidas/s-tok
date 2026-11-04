@@ -42,7 +42,7 @@ public class RegistroModel(S_tokDbContext context) : PageModel
             anteriores.ForEach(e => e.Principal = false);
         }
 
-        context.Enderecos.Add(new Endereco
+        context.Enderecos.Add(new s_tok.Models.Endereco
         {
             PessoaId = Input.PessoaId,
             Logradouro = Input.Logradouro.Trim(),
