@@ -40,7 +40,7 @@
         }
         else
         {
-            <form method="post">
+            <form method="post" data-protect-unsaved>
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                 @RenderBody()
                 <partial name="_BotoesFormulario"
@@ -60,5 +60,6 @@
     @if (modoComplementar)
     {
         <script src="~/js/dados-complementares-pessoa.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true "></script>
     }
 }
