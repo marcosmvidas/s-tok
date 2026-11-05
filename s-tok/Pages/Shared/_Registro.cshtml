@@ -11,49 +11,88 @@
     var modoComplementar = ViewData["ModoComplementar"] as bool? ?? false;
 }
 
-<div class="page-heading">
-    <div>
-        <h1>@titulo</h1>
-        @if (!string.IsNullOrWhiteSpace(descricao))
-        {
-            <p>@descricao</p>
-        }
-    </div>
-    <a asp-page="@paginaVoltar" class="btn btn-outline-secondary">@textoVoltar</a>
-</div>
-
-<section class="content-panel">
-    <header class="panel-header">
+@if (modoComplementar)
+{
+    <div class="page-heading">
         <div>
-            <h2 class="panel-title">@painelTitulo</h2>
-            @if (!string.IsNullOrWhiteSpace(painelSubtitulo))
+            <h1>@titulo</h1>
+            @if (!string.IsNullOrWhiteSpace(descricao))
             {
-                <div class="panel-subtitle">@painelSubtitulo</div>
+                <p>@descricao</p>
             }
         </div>
-    </header>
-
-    <div class="p-4">
-        @if (modoComplementar)
-        {
-            @RenderBody()
-        }
-        else
-        {
-            <form method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                @RenderBody()
-                <partial name="_BotoesFormulario"
-                         model="@(new s_tok.Pages.Shared.BotoesFormularioModel
-                         {
-                             TextoSalvar = textoSalvar,
-                             TextoCancelar = "Cancelar",
-                             PaginaCancelar = paginaVoltar
-                         })" />
-            </form>
-        }
+        <a asp-page="@paginaVoltar" class="btn btn-outline-secondary">@textoVoltar</a>
     </div>
-</section>
+
+    <section class="content-panel">
+        <header class="panel-header">
+            <div>
+                <h2 class="panel-title">@painelTitulo</h2>
+                @if (!string.IsNullOrWhiteSpace(painelSubtitulo))
+                {
+                    <div class="panel-subtitle">@painelSubtitulo</div>
+                }
+            </div>
+        </header>
+        <div class="p-4">
+            @RenderBody()
+        </div>
+    </section>
+}
+else
+{
+    <div class="form-protected-overlay"
+         id="formProtectedOverlay"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="formProtectedTitle"
+         tabindex="-1">
+        <div class="form-protected-dialog">
+            <div class="page-heading">
+                <div>
+                    <h1 id="formProtectedTitle">@titulo</h1>
+                    @if (!string.IsNullOrWhiteSpace(descricao))
+                    {
+                        <p>@descricao</p>
+                    }
+                </div>
+                <a asp-page="@paginaVoltar" class="btn btn-outline-secondary">@textoVoltar</a>
+            </div>
+
+            <section class="content-panel">
+                <header class="panel-header">
+                    <div>
+                        <h2 class="panel-title">@painelTitulo</h2>
+                        @if (!string.IsNullOrWhiteSpace(painelSubtitulo))
+                        {
+                            <div class="panel-subtitle">@painelSubtitulo</div>
+                        }
+                    </div>
+                </header>
+
+                <div class="p-4">
+                    <form method="post" data-form-protected>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @RenderBody()
+                        <partial name="_BotoesFormulario"
+                                 model="@(new s_tok.Pages.Shared.BotoesFormularioModel
+                                 {
+                                     TextoSalvar = textoSalvar,
+                                     TextoCancelar = "Cancelar",
+                                     PaginaCancelar = paginaVoltar
+                                 })" />
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/formulario-protegido.css"
+          asp-append-version="true" />
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
