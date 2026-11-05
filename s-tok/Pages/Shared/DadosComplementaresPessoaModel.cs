@@ -8,4 +8,10 @@ public sealed class DadosComplementaresPessoaModel
     public bool PossuiDocumento { get; set; }
     public int QuantidadeContatos { get; set; }
     public int QuantidadeEnderecos { get; set; }
+
+    /// <summary>
+    /// Exibe somente os cards informativos, com os botões desabilitados,
+    /// enquanto o cadastro principal ainda não foi salvo.
+    /// </summary>
+    public bool SomenteVisualizacao { get; set; }
 }

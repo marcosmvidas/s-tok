@@ -66,35 +66,5 @@ else
         </div>
     </div>
 
-    <section class="mt-4 pt-3 border-top" aria-labelledby="dadosComplementaresTitulo">
-        <div class="mb-3">
-            <h3 class="h6 fw-semibold mb-1" id="dadosComplementaresTitulo">Dados complementares</h3>
-            <p class="text-muted small mb-0">Salve o cadastro principal para vincular contatos, endereços e documento à pessoa.</p>
-        </div>
-        <div class="row g-3">
-            <div class="col-12 col-md-4">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Contato</div>
-                    <div class="small text-muted mb-3">Telefone, WhatsApp ou e-mail</div>
-                    <button type="button" class="btn btn-outline-primary btn-sm" disabled aria-disabled="true">+ Adicionar contato</button>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Endereço</div>
-                    <div class="small text-muted mb-3">Localização e endereço principal</div>
-                    <button type="button" class="btn btn-outline-primary btn-sm" disabled aria-disabled="true">+ Adicionar endereço</button>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="fw-semibold mb-1">Documento</div>
-                    <div class="small text-muted mb-3">CPF, CNPJ ou outro documento</div>
-                    <button type="button" class="btn btn-outline-primary btn-sm" disabled aria-disabled="true">+ Adicionar documento</button>
-                </div>
-            </div>
-        </div>
-        <div class="form-text mt-2">Após salvar, você será direcionado à etapa de complementação, onde os botões estarão disponíveis.</div>
-    </section>
-
+    <partial name="_DadosComplementaresPessoa" model="new s_tok.Pages.Shared.DadosComplementaresPessoaModel { SomenteVisualizacao = true }" />
 }
