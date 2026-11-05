@@ -1,28 +1,33 @@
-@model s_tok.Pages.Shared.DadosComplementaresPessoaModel
-@using s_tok.Models.Enums
-
-@Html.AntiForgeryToken()
-
-@if (TempData["Sucesso"] is string sucesso)
-{
-    <div class="alert alert-success" role="status">@sucesso</div>
-}
-
 <section class="mt-4">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
         <div>
-            <h3 class="h5 mb-1">Dados complementares de @Model.NomePessoa</h3>
-            <p class="text-muted small mb-0">Adicione os dados vinculados à mesma pessoa.</p>
+            <h3 class="h5 mb-1">@(Model.SomenteVisualizacao ? "Dados complementares" : $"Dados complementares de {Model.NomePessoa}")</h3>
+            <p class="text-muted small mb-0">
+                @(Model.SomenteVisualizacao
+                    ? "Salve o cadastro principal para liberar o vínculo de contatos, endereços e documento."
+                    : "Adicione os dados vinculados à mesma pessoa.")
+            </p>
         </div>
-        <a asp-page="@Model.PaginaConcluir" class="btn btn-outline-secondary btn-sm">Concluir depois</a>
+        @if (!Model.SomenteVisualizacao)
+        {
+            <a asp-page="@Model.PaginaConcluir" class="btn btn-outline-secondary btn-sm">Concluir depois</a>
+        }
     </div>
 
     <div class="row g-3">
         <div class="col-12 col-md-4">
             <div class="border rounded-3 p-3 h-100">
                 <div class="fw-semibold mb-1">Documento</div>
-                <div class="small text-muted mb-3">@(Model.PossuiDocumento ? "Documento já cadastrado" : "Nenhum documento cadastrado")</div>
-                @if (!Model.PossuiDocumento)
+                <div class="small text-muted mb-3">
+                    @(Model.SomenteVisualizacao
+                        ? "CPF, CNPJ ou outro documento"
+                        : Model.PossuiDocumento ? "Documento já cadastrado" : "Nenhum documento cadastrado")
+                </div>
+                @if (Model.SomenteVisualizacao)
+                {
+                    <button type="button" class="btn btn-outline-secondary btn-sm" disabled>+ Adicionar documento</button>
+                }
+                else if (!Model.PossuiDocumento)
                 {
                     <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocumento">+ Documento</button>
                 }
@@ -30,21 +35,41 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="border rounded-3 p-3 h-100">
-                <div class="fw-semibold mb-1">Contatos</div>
-                <div class="small text-muted mb-3">@Model.QuantidadeContatos contato(s) cadastrado(s)</div>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalContato">+ Contato</button>
+                <div class="fw-semibold mb-1">Contato</div>
+                <div class="small text-muted mb-3">
+                    @(Model.SomenteVisualizacao ? "Telefone, WhatsApp ou e-mail" : $"{Model.QuantidadeContatos} contato(s) cadastrado(s)")
+                </div>
+                @if (Model.SomenteVisualizacao)
+                {
+                    <button type="button" class="btn btn-outline-secondary btn-sm" disabled>+ Adicionar contato</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalContato">+ Contato</button>
+                }
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="border rounded-3 p-3 h-100">
-                <div class="fw-semibold mb-1">Endereços</div>
-                <div class="small text-muted mb-3">@Model.QuantidadeEnderecos endereço(s) cadastrado(s)</div>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEndereco">+ Endereço</button>
+                <div class="fw-semibold mb-1">Endereço</div>
+                <div class="small text-muted mb-3">
+                    @(Model.SomenteVisualizacao ? "Localização e endereço principal" : $"{Model.QuantidadeEnderecos} endereço(s) cadastrado(s)")
+                </div>
+                @if (Model.SomenteVisualizacao)
+                {
+                    <button type="button" class="btn btn-outline-secondary btn-sm" disabled>+ Adicionar endereço</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEndereco">+ Endereço</button>
+                }
             </div>
         </div>
     </div>
 </section>
 
+@if (!Model.SomenteVisualizacao)
+{
 <div class="modal fade" id="modalDocumento" tabindex="-1" aria-labelledby="modalDocumentoTitulo" aria-hidden="true"
      data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -167,3 +192,5 @@
         </div>
     </div>
 </div>
+
+}
