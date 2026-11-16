@@ -79,9 +79,9 @@ a {
     color: #fff;
 }
 
-    .brand:hover {
-        color: #fff;
-    }
+.brand:hover {
+    color: #fff;
+}
 
 .brand-mark {
     display: grid;
@@ -102,7 +102,6 @@ a {
 }
 
 /* Navegação lateral */
-
 .sidebar-caption {
     padding: 0 12px;
     margin-bottom: 12px;
@@ -134,16 +133,16 @@ a {
     transition: background .2s, color .2s;
 }
 
-    .nav-item:hover {
-        background: rgba(255, 255, 255, .09);
-        color: #fff;
-    }
+.nav-item:hover {
+    background: rgba(255, 255, 255, .09);
+    color: #fff;
+}
 
-    .nav-item.active {
-        background: var(--stok-blue);
-        color: #fff;
-        font-weight: 600;
-    }
+.nav-item.active {
+    background: var(--stok-blue);
+    color: #fff;
+    font-weight: 600;
+}
 
 .nav-icon {
     display: inline-grid;
@@ -153,7 +152,6 @@ a {
 }
 
 /* Rodapé do menu */
-
 .sidebar-footer {
     display: flex;
     align-items: center;
@@ -190,7 +188,6 @@ a {
 }
 
 /* Barra superior */
-
 .topbar {
     position: sticky;
     top: 0;
@@ -268,7 +265,6 @@ a {
 }
 
 /* Conteúdo das páginas */
-
 .page-content {
     flex: 1;
     width: 100%;
@@ -283,19 +279,19 @@ a {
     margin-bottom: 28px;
 }
 
-    .page-heading h1 {
-        margin: 0;
-        font-size: 26px;
-        font-weight: 750;
-        letter-spacing: -.7px;
-    }
+.page-heading h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 750;
+    letter-spacing: -.7px;
+}
 
-    .page-heading p {
-        margin: 8px 0 0;
-        color: var(--stok-muted);
-        font-size: 13px;
-        line-height: 1.6;
-    }
+.page-heading p {
+    margin: 8px 0 0;
+    color: var(--stok-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
 
 .page-date {
     padding: 10px 13px;
@@ -308,7 +304,6 @@ a {
 }
 
 /* Cartões */
-
 .metric-card {
     height: 100%;
     padding: 22px;
@@ -340,25 +335,25 @@ a {
     font-size: 20px;
 }
 
-    .metric-icon.blue {
-        background: #E8EFF5;
-        color: #3F667F;
-    }
+.metric-icon.blue {
+    background: #E8EFF5;
+    color: #3F667F;
+}
 
-    .metric-icon.green {
-        background: #E7F2ED;
-        color: #477E6D;
-    }
+.metric-icon.green {
+    background: #E7F2ED;
+    color: #477E6D;
+}
 
-    .metric-icon.orange {
-        background: #F8F0E3;
-        color: #946522;
-    }
+.metric-icon.orange {
+    background: #F8F0E3;
+    color: #946522;
+}
 
-    .metric-icon.red {
-        background: #F8EAEA;
-        color: #A94D52;
-    }
+.metric-icon.red {
+    background: #F8EAEA;
+    color: #A94D52;
+}
 
 .metric-value {
     margin-top: 19px;
@@ -374,7 +369,6 @@ a {
 }
 
 /* Painéis */
-
 .content-panel {
     height: 100%;
     overflow: hidden;
@@ -487,6 +481,37 @@ a {
         background: #F8EAEA;
         color: #A94D52;
     }
+
+/* =========================================
+   S-TOK | Ações da listagem
+   ========================================= */
+
+.table-listagem .col-acoes {
+    text-align: left !important;
+    white-space: nowrap;
+    width: 220px;
+    min-width: 220px;
+}
+
+.listagem-acoes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: max-content;
+    min-width: 150px;
+}
+
+.listagem-acoes .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.table-listagem tbody tr:hover td {
+    background-color: #F7F9FB;
+}
 
 /* Gráfico demonstrativo */
 

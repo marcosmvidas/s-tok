@@ -374,10 +374,47 @@ body {
     transition: background .2s, transform .2s;
 }
 
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 49px;
+    border: 0;
+    border-radius: 7px;
+    /* Estado normal: azul escuro */
+    background: #075fe7;
+    box-shadow: 0 5px 15px rgb(7 95 231 / 30%);
+    color: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+    /* HOVER: alternância forte de cor */
     .login-button:hover {
-        background: var(--blue-hover);
-        transform: translateY(-1px);
+        background: #00b4ff;
+        box-shadow: 0 8px 22px rgb(0 180 255 / 50%);
+        transform: translateY(-2px);
     }
+
+    /* Clique */
+    .login-button:active {
+        background: #003f9e;
+        transform: scale(0.97);
+        box-shadow: 0 2px 6px rgb(0 63 158 / 40%);
+    }
+
+    /* Foco */
+    .login-button:focus-visible {
+        outline: 3px solid #80d8ff;
+        outline-offset: 3px;
+    }
+
 
 .security-note {
     margin: 24px 0 0;

@@ -1,0 +1,94 @@
+/* =========================================
+   S-TOK | Formulário em modo protegido
+   ========================================= */
+
+body.form-protected-active {
+    overflow: hidden;
+}
+
+.form-protected-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 32px);
+    overflow: auto;
+    background: rgba(20, 35, 50, .66);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.form-protected-dialog {
+    width: min(100%, 1120px);
+    max-height: 100%;
+    overflow: auto;
+    padding: clamp(16px, 2.5vw, 30px);
+    border: 1px solid rgba(255, 255, 255, .55);
+    border-radius: 18px;
+    background: var(--stok-background, #F5F7FA);
+    box-shadow: 0 24px 80px rgba(8, 20, 34, .30);
+    animation: form-protected-appear .18s ease-out;
+}
+
+.form-protected-dialog .page-heading {
+    margin-bottom: 20px;
+}
+
+.form-protected-dialog .content-panel {
+    height: auto;
+    box-shadow: 0 5px 20px rgba(24, 39, 75, .06);
+}
+
+.form-protected-dialog .p-4 {
+    padding: clamp(16px, 2.2vw, 28px) !important;
+}
+
+.form-protected-dialog form {
+    margin: 0;
+}
+
+@keyframes form-protected-appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .form-protected-overlay {
+        align-items: stretch;
+        padding: 8px;
+    }
+
+    .form-protected-dialog {
+        width: 100%;
+        max-height: 100%;
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .form-protected-dialog .page-heading {
+        gap: 12px;
+    }
+
+    .form-protected-dialog .page-heading h1 {
+        font-size: 22px;
+    }
+
+    .form-protected-dialog .panel-header {
+        padding: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-protected-dialog {
+        animation: none;
+    }
+}

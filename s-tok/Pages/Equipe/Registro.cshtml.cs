@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using s_tok.Models;
 using s_tok.Pages.Shared;
+using s_tok.Services;
 
 namespace s_tok.Pages.Equipe;
 
@@ -117,6 +118,7 @@ public class RegistroModel(
             if (!resultadoPerfil.Succeeded)
             {
                 await transacao.RollbackAsync();
+
                 foreach (var erro in resultadoPerfil.Errors)
                     ModelState.AddModelError(string.Empty, erro.Description);
                 return Page();
@@ -125,12 +127,17 @@ public class RegistroModel(
             await context.SaveChangesAsync();
             await transacao.CommitAsync();
 
-            TempData["Sucesso"] = "Acesso e cadastro da equipe criados. Agora você pode incluir documento, contatos e endereços.";
-            return RedirectToPage("/Equipe/Registro", new { pessoaId = pessoa.Id });
+            TempData["Sucesso"] = 
+                "Cadastro da equipe salvo. Agora você pode incluir documento, contatos e endereços.";
+            
+            return RedirectToPage(
+                "/Equipe/Registro", 
+                new { pessoaId = pessoa.Id });
         }
         catch
         {
             await transacao.RollbackAsync();
+
             ModelState.AddModelError(string.Empty,
                 "Não foi possível concluir o cadastro. Verifique os dados e tente novamente.");
             return Page();
@@ -155,6 +162,10 @@ public class RegistroModel(
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Informe a senha.")]
+        [StringLength(
+            100, 
+            MinimumLength = PasswordPolicy.MinimoSenhaInterna, 
+            ErrorMessage = "A senha deve ter no mínimo {6} caracteres.")]
         [DataType(DataType.Password)]
         [Display(Name = "Senha")]
         public string Senha { get; set; } = string.Empty;

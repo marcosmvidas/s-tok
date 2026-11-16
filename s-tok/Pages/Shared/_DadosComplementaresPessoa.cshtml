@@ -52,9 +52,11 @@
         <div class="col-12 col-md-4">
             <div class="border rounded-3 p-3 h-100">
                 <div class="fw-semibold mb-1">Endereço</div>
+                
                 <div class="small text-muted mb-3">
                     @(Model.SomenteVisualizacao ? "Localização e endereço principal" : $"{Model.QuantidadeEnderecos} endereço(s) cadastrado(s)")
                 </div>
+
                 @if (Model.SomenteVisualizacao)
                 {
                     <button type="button" class="btn btn-outline-secondary btn-sm" disabled>+ Adicionar endereço</button>

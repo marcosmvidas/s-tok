@@ -8,6 +8,8 @@
 
     if (Model.DadosComplementares is not null)
     {
+        Model.DadosComplementares.SomenteVisualizacao = false;
+
         ViewData["ModoComplementar"] = true;
         ViewData["Title"] = "Dados complementares da equipe";
         ViewData["Descricao"] = "O acesso e o cadastro da pessoa foram criados. Inclua os dados complementares.";
@@ -61,7 +63,11 @@ else
                 <label asp-for="Entrada.Senha" class="form-label"></label>
                 <input asp-for="Entrada.Senha" class="form-control" autocomplete="new-password" />
                 <span asp-validation-for="Entrada.Senha" class="text-danger small"></span>
-                <div class="form-text">Utilize pelo menos 12 caracteres, incluindo letras maiúsculas, minúsculas, números e símbolos.</div>
+                <div class="form-text">
+                    Senha interna: mínimo de 8 caracteres.
+                    Para o perfil Admin, utilize uma senha forte com
+                    pelo menos 12 caracteres.
+                </div>
             </div>
             <div class="col-12 col-md-6">
                 <label asp-for="Entrada.ConfirmarSenha" class="form-label"></label>

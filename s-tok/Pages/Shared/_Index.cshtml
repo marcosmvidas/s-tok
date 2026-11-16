@@ -8,10 +8,11 @@
              TextoBotaoNovo = Model.TextoBotaoNovo
          })" />
 
-<section class="content-panel">
+<section class="content-panel panel-listagem">
     <header class="panel-header">
         <div>
             <h2 class="panel-title">@Model.Titulo</h2>
+
             @if (!string.IsNullOrWhiteSpace(Model.Descricao))
             {
                 <div class="panel-subtitle">@Model.Descricao</div>
@@ -19,36 +20,48 @@
         </div>
     </header>
 
-    <div class="table-responsive">
-        <table class="table table-stok align-middle">
+    @{
+        var itens = Model.Itens.ToList();
+
+        var temAcoes =
+            !string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
+            || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
+            || !string.IsNullOrWhiteSpace(Model.PaginaExcluir);
+    }
+
+    <div class="table-responsive listagem-wrapper">
+        <table class="table table-stok table-hover align-middle table-listagem">
             <thead>
                 <tr>
                     @foreach (var coluna in Model.Colunas)
                     {
-                        <th>@coluna.Titulo</th>
+                        <th scope="col">@coluna.Titulo</th>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
-                      || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
-                      || !string.IsNullOrWhiteSpace(Model.PaginaExcluir))
+
+                    @if (temAcoes)
                     {
-                        <th class="text-end">AÇÕES</th>
+                        <th scope="col" class="col-acoes">
+                            AÇÕES
+                        </th>
                     }
                 </tr>
             </thead>
-            <tbody>
-                @{
-                    var itens = Model.Itens.ToList();
-                    var temAcoes = !string.IsNullOrWhiteSpace(Model.PaginaDetalhes)
-                        || !string.IsNullOrWhiteSpace(Model.PaginaAlterar)
-                        || !string.IsNullOrWhiteSpace(Model.PaginaExcluir);
-                }
 
+            <tbody>
                 @if (itens.Count == 0)
                 {
                     <tr>
                         <td colspan="@(Model.Colunas.Count + (temAcoes ? 1 : 0))"
-                            class="text-center py-4">
-                            @Model.MensagemVazia
+                            class="listagem-vazia">
+                            <div class="empty-state">
+                                <span class="empty-state-title">
+                                    Nenhum registro encontrado
+                                </span>
+
+                                <span class="empty-state-description">
+                                    @Model.MensagemVazia
+                                </span>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -60,9 +73,16 @@
                             @foreach (var coluna in Model.Colunas)
                             {
                                 <td class="@coluna.ClasseCss">
-                                    @if (string.Equals(coluna.Formato, "email-confirmado", StringComparison.OrdinalIgnoreCase))
+                                    @if (string.Equals(
+                                        coluna.Formato,
+                                        "email-confirmado",
+                                        StringComparison.OrdinalIgnoreCase))
                                     {
-                                        var confirmado = string.Equals(Model.ObterValorFormatado(item, coluna), "Sim", StringComparison.Ordinal);
+                                        var confirmado = string.Equals(
+                                            Model.ObterValorFormatado(item, coluna),
+                                            "Sim",
+                                            StringComparison.Ordinal);
+
                                         <span class="stock-badge @(confirmado ? "ok" : "low")">
                                             @(confirmado ? "Confirmado" : "Pendente")
                                         </span>
@@ -76,15 +96,17 @@
 
                             @if (temAcoes)
                             {
-                                <td class="text-end">
-                                    <partial name="_BotoesAcoes"
-                                             model="@(new s_tok.Pages.Shared.AcoesListagemModel {
-                                                 Id = Model.ObterId(item),
-                                                 NomeRegistro = Model.ObterNome(item),
-                                                 DetalhesPage = Model.PaginaDetalhes ?? string.Empty,
-                                                 AlterarPage = Model.PaginaAlterar ?? string.Empty,
-                                                 ExcluirPage = Model.PaginaExcluir ?? string.Empty
-                                             })" />
+                                <td class="col-acoes">
+                                    <div class="listagem-acoes">
+                                        <partial name="_BotoesAcoes"
+                                                 model="@(new s_tok.Pages.Shared.AcoesListagemModel {
+                                                     Id = Model.ObterId(item),
+                                                     NomeRegistro = Model.ObterNome(item),
+                                                     DetalhesPage = Model.PaginaDetalhes ?? string.Empty,
+                                                     AlterarPage = Model.PaginaAlterar ?? string.Empty,
+                                                     ExcluirPage = Model.PaginaExcluir ?? string.Empty
+                                                 })" />
+                                    </div>
                                 </td>
                             }
                         </tr>
