@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
@@ -20,90 +21,308 @@
     <div class="app-shell">
 
         <aside class="sidebar" id="sidebar">
+
+            <!-- MARCA -->
             <a class="brand" asp-page="/Index">
                 <span class="brand-mark">S</span>
                 <span class="brand-name">S-TOK</span>
             </a>
 
-            <div class="sidebar-caption">MENU PRINCIPAL</div>
+            <!-- NAVEGAÇÃO -->
+            <nav class="sidebar-nav" id="sidebarNav"
+                 aria-label="Menu principal">
 
-            <nav class="sidebar-nav" aria-label="Menu principal">
-                <a class="nav-item active" asp-page="/Index">
+                <div class="sidebar-caption">MENU PRINCIPAL</div>
+
+                <!-- DASHBOARD -->
+                <a class="nav-item nav-link-page"
+                   asp-page="/Index">
                     <span class="nav-icon">▦</span>
                     <span>Dashboard</span>
                 </a>
 
-                <a class="nav-item" asp-page="/Produtos/Index"
-                   aria-label="Produtos, módulo ainda não disponível">
-                    <span class="nav-icon">▤</span>
-                    <span>Produtos</span>
-                </a>
-
-                <a class="nav-item" href="#"
-                   aria-label="Estoque, módulo ainda não disponível">
-                    <span class="nav-icon">▣</span>
-                    <span>Estoque</span>
-                </a>
-
-                <a class="nav-item" asp-page="/Contato/Index">
-                    <span class="nav-icon">▣</span>
-                    <span>Contatos</span>
-                </a>
-
-                <a class="nav-item" asp-page="/Endereco/Index">
-                    <span class="nav-icon">⌂</span>
-                    <span>Endereços</span>
-                </a>
-
-                <a class="nav-item" asp-page="/Documento/Index">
-                    <span class="nav-icon">▤</span>
-                    <span>Documentos</span>
-                </a>
-
-                <a class="nav-item" href="#"
-                   aria-label="Movimentações, módulo ainda não disponível">
-                    <span class="nav-icon">⇄</span>
-                    <span>Movimentações</span>
-                </a>
-
                 <div class="sidebar-caption sidebar-caption-spaced">
-                    CADASTROS
-                </div>
-                <a class="nav-item" asp-page="/Equipe/Index">
-                    <span class="nav-icon">♙</span>
-                    <span>Equipe</span>
-                </a>
-
-                <a class="nav-item" href="#">
-                    <span class="nav-icon">▧</span>
-                    <span>Categorias</span>
-                </a>
-
-                <a class="nav-item" asp-page="/Cliente/Index">
-                    <span class="nav-icon">♙</span>
-                    <span>Clientes</span>
-                </a>
-
-                <a class="nav-item" asp-page="/Fornecedor/Index">
-                    <span class="nav-icon">♧</span>
-                    <span>Fornecedores</span>
-                </a>
-
-                <div class="sidebar-caption sidebar-caption-spaced">
-                    ANÁLISES
+                    MÓDULOS
                 </div>
 
-                <a class="nav-item" href="#">
-                    <span class="nav-icon">▥</span>
-                    <span>Relatórios</span>
-                </a>
+                <div id="sidebarNavGroups">
 
-                <a class="nav-item" href="#">
-                    <span class="nav-icon">⚙</span>
-                    <span>Configurações</span>
-                </a>
+                    <!-- FINANCEIRO -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuFinanceiro"
+                            aria-expanded="false"
+                            aria-controls="menuFinanceiro">
+                        <span class="nav-icon">＄</span>
+                        <span>Financeiro</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuFinanceiro"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Financeiro/Lancamento/Index">
+                            Lançamentos
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Financeiro/ContasPagar/Index">
+                            Contas a pagar
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Financeiro/ContasReceber/Index">
+                            Contas a receber
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Financeiro/FluxoCaixa/Index">
+                            Fluxo de caixa
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Financeiro/Relatorios/Index">
+                            Relatórios financeiros
+                        </a>
+                    </div>
+
+                    <!-- COMERCIAL -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuComercial"
+                            aria-expanded="false"
+                            aria-controls="menuComercial">
+                        <span class="nav-icon">▣</span>
+                        <span>Comercial</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuComercial"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <span class="submenu-item is-disabled">
+                            Orçamentos <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Pedidos <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Vendas <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Devoluções <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Comissões <small>Em breve</small>
+                        </span>
+                    </div>
+
+                    <!-- COMPRAS -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuCompras"
+                            aria-expanded="false"
+                            aria-controls="menuCompras">
+                        <span class="nav-icon">🛒</span>
+                        <span>Compras e suprimentos</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuCompras"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <span class="submenu-item is-disabled">
+                            Solicitações de compra <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Cotações <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Pedidos de compra <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Recebimentos <small>Em breve</small>
+                        </span>
+                    </div>
+
+                    <!-- ESTOQUE -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuEstoque"
+                            aria-expanded="false"
+                            aria-controls="menuEstoque">
+                        <span class="nav-icon">▤</span>
+                        <span>Estoque</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuEstoque"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Produtos/Index">
+                            Produtos
+                        </a>
+
+                        <span class="submenu-item is-disabled">
+                            Entradas e saídas <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Transferências <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Inventário <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Categorias <small>Em breve</small>
+                        </span>
+                    </div>
+
+                    <!-- CADASTROS -->
+                    <div class="sidebar-caption sidebar-caption-spaced">
+                        GESTÃO
+                    </div>
+
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuCadastros"
+                            aria-expanded="false"
+                            aria-controls="menuCadastros">
+                        <span class="nav-icon">♙</span>
+                        <span>Cadastros</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuCadastros"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Cliente/Index">
+                            Clientes
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Fornecedor/Index">
+                            Fornecedores
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Equipe/Index">
+                            Equipe
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Contato/Index">
+                            Contatos
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Endereco/Index">
+                            Endereços
+                        </a>
+
+                        <a class="submenu-item nav-link-page"
+                           asp-page="/Documento/Index">
+                            Documentos
+                        </a>
+                    </div>
+
+                    <!-- PESSOAL / RH -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuRh"
+                            aria-expanded="false"
+                            aria-controls="menuRh">
+                        <span class="nav-icon">♧</span>
+                        <span>Pessoal / RH</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuRh"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <span class="submenu-item is-disabled">
+                            Folha de pagamento <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Rubricas <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Cargos e funções <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Férias e afastamentos <small>Em breve</small>
+                        </span>
+                    </div>
+
+                    <!-- RELATÓRIOS -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuRelatorios"
+                            aria-expanded="false"
+                            aria-controls="menuRelatorios">
+                        <span class="nav-icon">▥</span>
+                        <span>Relatórios</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuRelatorios"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <span class="submenu-item is-disabled">
+                            Relatórios gerenciais <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Relatórios operacionais <small>Em breve</small>
+                        </span>
+                    </div>
+
+                    <!-- CONFIGURAÇÕES -->
+                    <button class="nav-item nav-item-toggle collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuConfiguracoes"
+                            aria-expanded="false"
+                            aria-controls="menuConfiguracoes">
+                        <span class="nav-icon">⚙</span>
+                        <span>Configurações</span>
+                        <span class="submenu-arrow">⌄</span>
+                    </button>
+
+                    <div class="collapse submenu"
+                         id="menuConfiguracoes"
+                         data-bs-parent="#sidebarNavGroups">
+
+                        <span class="submenu-item is-disabled">
+                            Usuários e permissões <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Empresas e filiais <small>Em breve</small>
+                        </span>
+                        <span class="submenu-item is-disabled">
+                            Parâmetros do sistema <small>Em breve</small>
+                        </span>
+                    </div>
+
+                </div>
             </nav>
 
+            <!-- RODAPÉ DA SIDEBAR -->
             <div class="sidebar-footer">
                 <div class="sidebar-footer-mark">S</div>
                 <div>
@@ -111,10 +330,14 @@
                     <span>Gestão inteligente</span>
                 </div>
             </div>
+
         </aside>
 
+        <!-- ÁREA PRINCIPAL -->
         <div class="main-area">
+
             <header class="topbar">
+
                 <button class="menu-toggle"
                         id="menuToggle"
                         type="button"
@@ -130,6 +353,7 @@
                 </div>
 
                 <div class="topbar-actions">
+
                     <div class="system-status">
                         <span class="status-dot"></span>
                         Ambiente de desenvolvimento
@@ -141,7 +365,9 @@
                     </div>
 
                     <form method="post" asp-page="/Account/Logout">
-                        <button type="submit" class="btn btn-link">Sair</button>
+                        <button type="submit" class="btn btn-link">
+                            Sair
+                        </button>
                     </form>
 
                 </div>
@@ -155,6 +381,7 @@
                 <span>© @DateTime.Now.Year S-TOK</span>
                 <span>Gestão de estoque inteligente</span>
             </footer>
+
         </div>
     </div>
 
@@ -164,5 +391,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

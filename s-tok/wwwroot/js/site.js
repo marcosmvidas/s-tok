@@ -1,22 +1,22 @@
-﻿
-(() => {
+﻿(() => {
     const toggle = document.getElementById("menuToggle");
     const overlay = document.getElementById("sidebarOverlay");
 
-    if (toggle && overlay) {
-        function setMenuOpen(isOpen) {
-            document.body.classList.toggle("sidebar-open", isOpen);
-            toggle.setAttribute("aria-expanded", String(isOpen));
-        }
+    if (!toggle || !overlay) return;
 
-        toggle.addEventListener("click", () => {
-            const isOpen = document.body.classList.contains("sidebar-open");
-            setMenuOpen(!isOpen);
-        });
+    function setMenuOpen(isOpen) {
+        document.body.classList.toggle("sidebar-open", isOpen);
+        toggle.setAttribute("aria-expanded", String(isOpen));
+    }
 
-        overlay.addEventListener("click", () => {
-            setMenuOpen(false);
-        });
+    toggle.addEventListener("click", () => {
+        const isOpen = document.body.classList.contains("sidebar-open");
+        setMenuOpen(!isOpen);
+    });
+
+    overlay.addEventListener("click", () => {
+        setMenuOpen(false);
+    });
 
     document.addEventListener("keydown", event => {
         if (event.key === "Escape") {

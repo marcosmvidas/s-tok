@@ -408,9 +408,9 @@ a {
     font-weight: 600;
 }
 
-    .panel-link:hover {
-        color: var(--stok-blue-hover);
-    }
+.panel-link:hover {
+    color: var(--stok-blue-hover);
+}
 
 /* Tabelas */
 
@@ -425,26 +425,26 @@ a {
     font-size: 12px;
 }
 
-    .table-stok thead th {
-        padding: 14px 20px;
-        border-bottom: 1px solid var(--stok-border);
-        background: #fafbfe;
-        color: var(--stok-muted);
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: .4px;
-        white-space: nowrap;
-    }
+.table-stok thead th {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--stok-border);
+    background: #fafbfe;
+    color: var(--stok-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    white-space: nowrap;
+}
 
-    .table-stok tbody td {
-        padding: 16px 20px;
-        border-bottom: 1px solid #f0f2f7;
-        color: #46536a;
-    }
+.table-stok tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f7;
+    color: #46536a;
+}
 
-    .table-stok tbody tr:last-child td {
-        border-bottom: 0;
-    }
+.table-stok tbody tr:last-child td {
+    border-bottom: 0;
+}
 
 .product-name {
     color: var(--stok-text);
@@ -467,20 +467,20 @@ a {
     white-space: nowrap;
 }
 
-    .stock-badge.ok {
-        background: #E7F2ED;
-        color: #477E6D;
-    }
+.stock-badge.ok {
+    background: #E7F2ED;
+    color: #477E6D;
+}
 
-    .stock-badge.low {
-        background: #F8F0E3;
-        color: #946522;
-    }
+.stock-badge.low {
+    background: #F8F0E3;
+    color: #946522;
+}
 
-    .stock-badge.out {
-        background: #F8EAEA;
-        color: #A94D52;
-    }
+.stock-badge.out {
+    background: #F8EAEA;
+    color: #A94D52;
+}
 
 /* =========================================
    S-TOK | Ações da listagem
@@ -543,9 +543,9 @@ a {
     background: #B7CBD8;
 }
 
-    .chart-bar.primary {
-        background: var(--stok-blue);
-    }
+.chart-bar.primary {
+    background: var(--stok-blue);
+}
 
 .chart-label {
     padding-bottom: 9px;
@@ -645,9 +645,9 @@ a {
         margin-bottom: 22px;
     }
 
-        .page-heading h1 {
-            font-size: 23px;
-        }
+    .page-heading h1 {
+        font-size: 23px;
+    }
 
     .app-footer {
         flex-wrap: wrap;
@@ -675,6 +675,64 @@ a {
         scroll-behavior: auto !important;
         transition-duration: .01ms !important;
     }
+}
+
+/* BOTÃO DO MENU EXPANSÍVEL */
+.nav-item-toggle {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* SETA DO SUBMENU */
+
+.submenu-arrow {
+    margin-left: auto;
+    font-size: 13px;
+    transition: transform .25s ease;
+}
+
+/* SETA QUANDO ABERTO */
+
+.nav-item-toggle[aria-expanded="true"] .submenu-arrow {
+    transform: rotate(180deg);
+}
+
+/* ÁREA DO SUBMENU */
+
+.submenu {
+    padding-left: 42px;
+    margin-top: 3px;
+    margin-bottom: 6px;
+}
+
+/* LINKS INTERNOS */
+
+.submenu-item {
+    display: block;
+    padding: 9px 12px;
+    color: var(--text-secondary, #9ca3af);
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 6px;
+    transition: background .2s ease, color .2s ease;
+}
+
+/* HOVER */
+
+.submenu-item:hover {
+    background: rgba(255,255,255,.07);
+    color: #fff;
+}
+
+/* ITEM ATIVO */
+
+.submenu-item.active {
+    color: #fff;
+    background: rgba(255,255,255,.10);
 }
 
 
@@ -828,5 +886,166 @@ hr {
         transition-duration: .01ms !important;
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
+    }
+}
+
+
+/* =========================================
+   S-TOK | Nova navegação lateral
+   ========================================= */
+
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.20) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(255,255,255,.20);
+}
+
+.sidebar-nav {
+    gap: 5px;
+}
+
+#sidebarNavGroups {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-caption {
+    margin-bottom: 10px;
+}
+
+.sidebar-caption-spaced {
+    margin-top: 24px;
+}
+
+/* Botões dos módulos */
+
+.nav-item-toggle {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.nav-item-toggle:focus-visible {
+    outline: 2px solid rgba(255,255,255,.75);
+    outline-offset: 2px;
+}
+
+.nav-item-toggle.is-current,
+.nav-item-toggle[aria-expanded="true"] {
+    background: rgba(255,255,255,.09);
+    color: #fff;
+}
+
+/* Seta dos módulos */
+
+.submenu-arrow {
+    display: inline-block;
+    margin-left: auto;
+    font-size: 15px;
+    line-height: 1;
+    transition: transform .2s ease;
+}
+
+.nav-item-toggle[aria-expanded="true"] .submenu-arrow {
+    transform: rotate(180deg);
+}
+
+/* Submenus */
+
+.submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 5px 0 7px 36px;
+    margin: 0;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 37px;
+    padding: 8px 12px;
+    border-radius: 7px;
+    color: #b9c5db;
+    font-size: 12px;
+    text-decoration: none;
+    transition: background .18s ease, color .18s ease;
+}
+
+.submenu-item:hover {
+    background: rgba(255,255,255,.08);
+    color: #fff;
+}
+
+.submenu-item.active {
+    background: rgba(82,125,152,.42);
+    color: #fff;
+    font-weight: 600;
+}
+
+.submenu-item small {
+    color: #8798ad;
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+/* Itens ainda não disponíveis */
+
+.submenu-item.is-disabled {
+    color: #8493a8;
+    cursor: default;
+    opacity: .75;
+}
+
+.submenu-item.is-disabled:hover {
+    background: transparent;
+    color: #8493a8;
+}
+
+/* Dashboard ativo */
+
+.nav-link-page.active {
+    background: var(--stok-blue);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Ajustes para telas menores */
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        width: min(var(--sidebar-width), 85vw);
+        padding-top: 22px;
+    }
+
+    .sidebar-nav {
+        padding-bottom: 18px;
+    }
+
+    .sidebar-footer {
+        margin-top: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .submenu-arrow,
+    .submenu-item,
+    .nav-item-toggle {
+        transition: none !important;
     }
 }
